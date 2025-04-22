@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:ibank/core/utils/appcolour.dart';
+import 'package:ibank/core/utils/text_style.dart';
+
+class HomeTileWidget extends StatelessWidget {
+  const HomeTileWidget({
+    super.key,
+    required this.title,
+    required this.iconPath,
+  });
+  final String title;
+  final String iconPath;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        height: 100.h,
+        decoration: BoxDecoration(
+          color: AppColours.naturalColor6,
+          borderRadius: BorderRadius.circular(20.r),
+          boxShadow: [
+            BoxShadow(
+              color: AppColours.naturalColor1.withValues(alpha: 0.2),
+              blurRadius: 15,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(iconPath, width: 28.w, height: 28.h),
+            SizedBox(height: 10.h),
+            Text(
+              textAlign: TextAlign.center,
+              title,
+              style: getCaption2TextStyle(color: AppColours.naturalColor3),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

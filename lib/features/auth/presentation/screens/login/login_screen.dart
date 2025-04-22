@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 );
               } else if (state is AuthSuccess) {
-                context.pushReplacement(HomeScreen());
+                context.pushAndRemoveUntil(HomeScreen());
               } else if (state is AuthLoading) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
