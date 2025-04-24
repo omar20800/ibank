@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/features/home/presentation/screens/home_screen.dart';
+import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 import 'package:ibank/features/welcome/presentation/screens/welcome_screen.dart';
 import 'package:ibank/firebase_options.dart';
 
@@ -35,7 +36,7 @@ class MainApp extends StatelessWidget {
         home:
             AppLocalStorage.getToken() == null
                 ? const WelcomeScreen()
-                : const HomeScreen(),
+                : const MainScreen(),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ibank/core/service/auth_service.dart';
 import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 
@@ -18,8 +19,14 @@ class AuthCubit extends Cubit<AuthStates> {
       await FirebaseFirestore.instance.collection('Users').doc(user?.uid).set({
         'lastLogin': DateTime.now(),
       });
-      AppLocalStorage.cacheToken(user?.uid ?? '');
-      emit(AuthSuccess());
+      AuthService().authenticateWithBiometrics().then((value) {
+        if (value == true) {
+          AppLocalStorage.cacheToken(user?.uid ?? '');
+          emit(AuthSuccess());
+        } else {
+          emit(AuthError(errorMessage: 'Authentication failed'));
+        }
+      });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         emit(AuthError(errorMessage: 'No user found for that email.'));

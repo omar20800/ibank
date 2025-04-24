@@ -8,7 +8,7 @@ import 'package:ibank/core/widgets/input_field_widget.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 import 'package:ibank/features/auth/presentation/screens/register/register_screen.dart';
-import 'package:ibank/features/home/presentation/screens/home_screen.dart';
+import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -49,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 );
               } else if (state is AuthSuccess) {
-                context.pushAndRemoveUntil(HomeScreen());
+                context.pushAndRemoveUntil(MainScreen());
               } else if (state is AuthLoading) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -134,7 +134,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                       Spacer(),
                       Center(
-                        child: Image.asset('assets/icons/Fingerprint.png'),
+                        child: Image.asset('assets/images/Fingerprint.png'),
                       ),
                       Spacer(),
                       Row(

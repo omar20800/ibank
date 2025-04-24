@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ibank/core/utils/appcolour.dart';
+import 'package:ibank/core/utils/box_shadow.dart';
 import 'package:ibank/core/utils/text_style.dart';
 
 class HomeTileWidget extends StatelessWidget {
@@ -17,17 +18,10 @@ class HomeTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        height: 100.h,
         decoration: BoxDecoration(
           color: AppColours.naturalColor6,
           borderRadius: BorderRadius.circular(20.r),
-          boxShadow: [
-            BoxShadow(
-              color: AppColours.naturalColor1.withValues(alpha: 0.2),
-              blurRadius: 15,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          boxShadow: [getDefaultBoxShadow()],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
