@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
+import 'package:ibank/core/widgets/picture_widget.dart';
 import 'package:ibank/features/home/presentation/widgets/credit_card_widget.dart';
 import 'package:ibank/features/home/presentation/widgets/home_tile_widget.dart';
 
@@ -20,14 +21,7 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
                 child: Row(
                   children: [
-                    ClipOval(
-                      child: Image.asset(
-                        'assets/images/pedri.jpg',
-                        width: 60.w,
-                        height: 60.h,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    PictureWidget(),
                     SizedBox(width: 20.w),
                     Text(
                       'Hi, Pedri Gonzalez',
@@ -62,7 +56,11 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      CreditCardWidget(),
+                      CreditCardWidget(
+                        username: 'Pedri Gonzalez',
+                        balance: 1000.0,
+                        serialnumber: '5424180273333333',
+                      ),
                       Expanded(
                         child: Row(
                           spacing: 15.w,

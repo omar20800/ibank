@@ -16,9 +16,10 @@ class AuthCubit extends Cubit<AuthStates> {
         password: password,
       );
       User? user = credential.user;
-      await FirebaseFirestore.instance.collection('Users').doc(user?.uid).set({
-        'lastLogin': DateTime.now(),
-      });
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user?.uid)
+          .update({'lastLogin': DateTime.now()});
       AuthService().authenticateWithBiometrics().then((value) {
         if (value == true) {
           AppLocalStorage.cacheToken(user?.uid ?? '');
@@ -61,6 +62,8 @@ class AuthCubit extends Cubit<AuthStates> {
         'imageUrl': '',
         'phoneNumber': '',
         'age': 0,
+        'criditCards': {
+        },
       });
       AppLocalStorage.cacheToken(user?.uid ?? '');
       emit(AuthSuccess());
@@ -74,6 +77,17 @@ class AuthCubit extends Cubit<AuthStates> {
       } else {
         emit(AuthError(errorMessage: 'An unknown error occurred.'));
       }
+    }
+  }
+
+  Future<void> logout() async {
+    emit(AuthLoading());
+    try {
+      await FirebaseAuth.instance.signOut();
+      await AppLocalStorage.removeToken();
+      emit(AuthSuccess());
+    } catch (e) {
+      emit(AuthError(errorMessage: 'An unknown error occurred.'));
     }
   }
 }

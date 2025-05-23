@@ -8,15 +8,25 @@ import 'package:ibank/core/widgets/input_field_widget.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 import 'package:ibank/features/auth/presentation/screens/login/login_screen.dart';
-import 'package:ibank/features/home/presentation/screens/home_screen.dart';
+import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 
-class RegisterScreen extends StatelessWidget {
-  RegisterScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final TextEditingController? nameController = TextEditingController();
+
   final TextEditingController? emailController = TextEditingController();
+
   final TextEditingController? passwordController = TextEditingController();
+
+  bool agreed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +60,7 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 );
               } else if (state is AuthSuccess) {
-                context.pushAndRemoveUntil(HomeScreen());
+                context.pushAndRemoveUntil(MainScreen());
               } else if (state is AuthLoading) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -120,9 +130,37 @@ class RegisterScreen extends StatelessWidget {
                               isPassword: true,
                             ),
                             const SizedBox(height: 20),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: agreed,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      agreed = value!;
+                                    });
+                                  },
+                                  activeColor: AppColours.primaryColor1,
+                                ),
+                                Text(
+                                  'I agree to the',
+                                  style: getCaption2TextStyle(),
+                                ),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    'terms and conditions',
+                                    style: getCaption2TextStyle(
+                                      color: AppColours.primaryColor1,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
                             CustomButtonWidget(
                               onPressed: () {
-                                if (_formKey.currentState!.validate()) {
+                                if (_formKey.currentState!.validate() &&
+                                    agreed) {
                                   cubit.register(
                                     nameController!.text.trim(),
                                     emailController!.text.trim(),
