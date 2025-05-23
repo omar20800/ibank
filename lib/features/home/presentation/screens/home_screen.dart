@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ibank/core/model/card_mode.dart';
+import 'package:ibank/core/model/user_model.dart';
+import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/picture_widget.dart';
-import 'package:ibank/features/home/presentation/widgets/credit_card_widget.dart';
+import 'package:ibank/core/widgets/credit_card_widget.dart';
+import 'package:ibank/features/home/presentation/screens/accountcard_screen.dart';
 import 'package:ibank/features/home/presentation/widgets/home_tile_widget.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
+  HomeScreen({super.key});
+  final UserModel? user = AppLocalStorage.getUser('user');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +28,7 @@ class HomeScreen extends StatelessWidget {
                     PictureWidget(),
                     SizedBox(width: 20.w),
                     Text(
-                      'Hi, Pedri Gonzalez',
+                      'Hi, ${user?.name}',
                       style: getBody1TextStyle(color: AppColours.naturalColor6),
                     ),
                     Spacer(),
@@ -56,11 +60,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      CreditCardWidget(
-                        username: 'Pedri Gonzalez',
-                        balance: 1000.0,
-                        serialnumber: '5424180273333333',
-                      ),
+                      CreditCardWidget(),
                       Expanded(
                         child: Row(
                           spacing: 15.w,
@@ -68,14 +68,17 @@ class HomeScreen extends StatelessWidget {
                             HomeTileWidget(
                               iconPath: 'assets/icons/wallet_icon.svg',
                               title: 'Account and Cards',
+                              destination: AccountcardScreen(),
                             ),
                             HomeTileWidget(
                               title: 'Transfer',
                               iconPath: 'assets/icons/transfer.svg',
+                              destination: AccountcardScreen(),
                             ),
                             HomeTileWidget(
                               title: 'Withdraw',
                               iconPath: 'assets/icons/credit-card.svg',
+                              destination: AccountcardScreen(),
                             ),
                           ],
                         ),
@@ -88,14 +91,17 @@ class HomeScreen extends StatelessWidget {
                             HomeTileWidget(
                               iconPath: 'assets/icons/mobile-banking.svg',
                               title: 'Mobile prepaid',
+                              destination: AccountcardScreen(),
                             ),
                             HomeTileWidget(
                               title: 'Pay the bill',
                               iconPath: 'assets/icons/receipt-list.svg',
+                              destination: AccountcardScreen(),
                             ),
                             HomeTileWidget(
                               title: 'Save online',
                               iconPath: 'assets/icons/pig.svg',
+                              destination: AccountcardScreen(),
                             ),
                           ],
                         ),
@@ -108,14 +114,17 @@ class HomeScreen extends StatelessWidget {
                             HomeTileWidget(
                               iconPath: 'assets/icons/credit-card 2.svg',
                               title: 'Credit card',
+                              destination: AccountcardScreen(),
                             ),
                             HomeTileWidget(
                               title: 'Transaction report',
                               iconPath: 'assets/icons/file-paragraph.svg',
+                              destination: AccountcardScreen(),
                             ),
                             HomeTileWidget(
                               title: 'Beneficiary',
                               iconPath: 'assets/icons/contacts.svg',
+                              destination: AccountcardScreen(),
                             ),
                           ],
                         ),

@@ -33,7 +33,8 @@ class _MainScreenState extends State<MainScreen> {
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentIndex,
           backgroundColor: AppColours.naturalColor6,
-          type: BottomNavigationBarType.fixed,
+          type: BottomNavigationBarType.shifting,
+          showUnselectedLabels: true,
           unselectedItemColor: AppColours.naturalColor1,
           selectedItemColor: AppColours.primaryColor1,
           items: [

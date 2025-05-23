@@ -9,6 +9,7 @@ import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/picture_widget.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
+import 'package:ibank/features/settings/presentation/widgets/settings_list_widget.dart';
 import 'package:ibank/features/welcome/presentation/screens/welcome_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -91,44 +92,6 @@ class SettingsScreen extends StatelessWidget {
                 PictureWidget(width: 100.w, height: 100.h),
               ],
             ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class SettingsListWidget extends StatelessWidget {
-  const SettingsListWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.separated(
-        itemCount: 5,
-        separatorBuilder: (context, index) {
-          return Column(
-            children: [
-              SizedBox(height: 10.h),
-              Divider(
-                color: AppColours.naturalColor4,
-                thickness: 1,
-              ),
-            ],
-          );
-        },
-        itemBuilder: (context, index) {
-          return Row(
-            children: [
-              Text('Password', style: getBody1TextStyle()),
-              Spacer(),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: AppColours.naturalColor4,
-              ),
-            ],
           );
         },
       ),

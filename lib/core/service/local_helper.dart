@@ -1,21 +1,22 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
+import 'package:ibank/core/model/user_model.dart';
 
 class AppLocalStorage {
-  static SharedPreferences? tokenpref;
+  static Box<UserModel>? userbox;
 
   static init() async {
-    tokenpref = await SharedPreferences.getInstance();
+    userbox = Hive.box<UserModel>('userbox');
   }
 
-  static cacheToken(String token) async {
-    await tokenpref?.setString('token', token);
+  static cacheUser(String key, UserModel user) async {
+    await userbox?.put(key, user);
   }
 
-  static getToken() {
-    return tokenpref?.getString('token');
+  static UserModel? getUser(String key) {
+    return userbox?.get(key);
   }
 
-  static removeToken() async {
-    await tokenpref?.remove('token');
+  static removeUser(String key) async {
+    await userbox?.delete(key);
   }
 }

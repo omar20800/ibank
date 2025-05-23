@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ibank/core/model/card_mode.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/features/home/presentation/widgets/serial_number_widget.dart';
 
 class CreditCardWidget extends StatelessWidget {
-  const CreditCardWidget({
-    super.key,
-    this.serialnumber = '',
-    this.username = '',
-    this.balance = 0.0,
-  });
-  final String username;
-  final String serialnumber;
-  final double balance;
+  const CreditCardWidget({super.key, this.card});
+  final CardModel? card;
 
   @override
   Widget build(BuildContext context) {
-    if (serialnumber.isEmpty == false) {
+    if (card != null) {
       return Container(
         width: double.infinity,
         height: 250.h,
@@ -25,7 +19,7 @@ class CreditCardWidget extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.fitWidth,
-            image: AssetImage('assets/images/${getcardtype(serialnumber)}.png'),
+            image: AssetImage('assets/images/${card?.type}.png'),
           ),
         ),
         child: Column(
@@ -34,21 +28,21 @@ class CreditCardWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                username,
+                card!.cardholdername,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: getTitle2TextStyle(color: AppColours.naturalColor6),
               ),
             ),
             Text(
-              getcardtype(serialnumber)!.toUpperCase(),
+              '${card!.type?.toUpperCase()}',
               style: getBody1TextStyle(color: AppColours.naturalColor6),
             ),
             SizedBox(height: 20.h),
-            SerialNumberWidget(serialNumber: serialnumber),
+            SerialNumberWidget(serialNumber: card!.cardnumber),
             SizedBox(height: 10.h),
             Text(
-              '\$$balance',
+              card!.expirationdate,
               style: getTitle2TextStyle(color: AppColours.naturalColor6),
             ),
           ],
@@ -66,25 +60,18 @@ class CreditCardWidget extends StatelessWidget {
           ),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [],
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'No Cards Available',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: getTitle2TextStyle(color: AppColours.naturalColor6),
+            ),
+          ],
         ),
       );
-    }
-  }
-
-  String? getcardtype(String cardnumber) {
-    if (cardnumber.startsWith('4')) {
-      return 'visa';
-    } else if (cardnumber.startsWith('5') || cardnumber.startsWith('2')) {
-      return 'mastercard';
-    } else if (cardnumber.startsWith('3')) {
-      return 'american express';
-    } else if (cardnumber.startsWith('6')) {
-      return 'discover';
-    } else {
-      return null;
     }
   }
 }

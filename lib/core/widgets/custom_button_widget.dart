@@ -10,7 +10,11 @@ class CustomButtonWidget extends StatelessWidget {
     this.onPressed,
     this.bgcolor,
     this.textColor,
+    this.width,
+    this.height,
   });
+  final double? width;
+  final double? height;
   final String text;
   final Function? onPressed;
   final Color? bgcolor;
@@ -19,8 +23,8 @@ class CustomButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
-      height: 60.h,
+      width: width ?? double.infinity,
+      height: height ?? 60.h,
       child: ElevatedButton(
         onPressed: () {
           if (onPressed != null) {
@@ -32,6 +36,7 @@ class CustomButtonWidget extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
+          shadowColor: Colors.transparent,
         ),
         child: Text(
           text,

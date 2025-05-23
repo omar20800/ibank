@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:ibank/core/model/user_model.dart';
 import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 import 'package:ibank/features/welcome/presentation/screens/welcome_screen.dart';
@@ -9,6 +11,9 @@ import 'package:ibank/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('tokenbox');
+  await Hive.openBox<UserModel>('userbox');
   await AppLocalStorage.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   SystemChrome.setSystemUIOverlayStyle(
@@ -33,7 +38,7 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'iBank',
         home:
-            AppLocalStorage.getToken() == null
+            AppLocalStorage.getUser('user')?.uid == null
                 ? const WelcomeScreen()
                 : const MainScreen(),
       ),
