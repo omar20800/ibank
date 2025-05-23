@@ -12,7 +12,7 @@ import 'package:ibank/features/home/presentation/widgets/home_tile_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
-  final UserModel? user = AppLocalStorage.getUser('user');
+  final UserModel? user = AppLocalStorage.getUser();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,37 +19,47 @@ class AuthCubit extends Cubit<AuthStates> {
         password: password,
       );
       User? user = credential.user;
-      await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(user?.uid)
-          .update({'lastLogin': DateTime.now()});
-      AuthService().authenticateWithBiometrics().then((value) {
-        if (value == true) {
-          final data = FirebaseFirestore.instance
-              .collection("Users")
-              .doc(user?.uid);
-          data.get().then(
-            (DocumentSnapshot doc) {
-              final data = doc.data() as Map<String, dynamic>;
-              AppLocalStorage.cacheUser('user', UserModel.fromJson(data));
-            },
-            onError: (e) {
-              log("Error getting data: $e");
-            },
-          );
+      if (user == null) {
+        emit(AuthError(errorMessage: 'No user found after login.'));
+        return;
+      }
+      await FirebaseFirestore.instance.collection('Users').doc(user.uid).update(
+        {'lastLogin': DateTime.now()},
+      );
+      final bool biometricsSuccess =
+          await AuthService().authenticateWithBiometrics();
+      if (biometricsSuccess) {
+        final DocumentSnapshot doc =
+            await FirebaseFirestore.instance
+                .collection("Users")
+                .doc(user.uid)
+                .get();
+        if (doc.exists && doc.data() != null) {
+          final data = doc.data() as Map<String, dynamic>;
+          AppLocalStorage.cacheUser(UserModel.fromJson(data));
           emit(AuthSuccess());
         } else {
-          emit(AuthError(errorMessage: 'Authentication failed'));
+          log("Error: User data not found in Firestore for UID: ${user.uid}");
+          emit(AuthError(errorMessage: 'User data not found.'));
         }
-      });
+      } else {
+        emit(
+          AuthError(errorMessage: 'Authentication failed. Please try again.'),
+        );
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         emit(AuthError(errorMessage: 'No user found for that email.'));
       } else if (e.code == 'wrong-password') {
         emit(AuthError(errorMessage: 'Wrong password provided for that user.'));
       } else {
-        emit(AuthError(errorMessage: 'An unknown error occurred.'));
+        emit(
+          AuthError(errorMessage: 'An unknown error occurred: ${e.message}'),
+        );
       }
+    } catch (e) {
+      log("Unexpected error during login: $e");
+      emit(AuthError(errorMessage: 'An unexpected error occurred.'));
     }
   }
 
@@ -65,11 +76,15 @@ class AuthCubit extends Cubit<AuthStates> {
             password: password,
           );
       User? user = credential.user;
-      await FirebaseFirestore.instance.collection('Users').doc(user?.uid).set({
-        'uid': user?.uid,
+      if (user == null) {
+        emit(AuthError(errorMessage: 'Failed to create user.'));
+        return;
+      }
+      await FirebaseFirestore.instance.collection('Users').doc(user.uid).set({
+        'uid': user.uid,
         'name': name,
         'email': emailAddress,
-        'balance': 0,
+        'balance': 0.0,
         'createdAt': DateTime.now(),
         'lastLogin': DateTime.now(),
         'imageUrl': '',
@@ -78,11 +93,10 @@ class AuthCubit extends Cubit<AuthStates> {
         'criditCards': {},
       });
       AppLocalStorage.cacheUser(
-        'user',
         UserModel(
           age: 0,
-          balance: 0,
-          uid: user?.uid,
+          balance: 0.0,
+          uid: user.uid,
           name: name,
           email: emailAddress,
           imageUrl: '',
@@ -98,8 +112,13 @@ class AuthCubit extends Cubit<AuthStates> {
           AuthError(errorMessage: 'The account already exists for that email.'),
         );
       } else {
-        emit(AuthError(errorMessage: 'An unknown error occurred.'));
+        emit(
+          AuthError(errorMessage: 'An unknown error occurred: ${e.message}'),
+        );
       }
+    } catch (e) {
+      log("Unexpected error during registration: $e");
+      emit(AuthError(errorMessage: 'An unexpected error occurred.'));
     }
   }
 
@@ -107,10 +126,11 @@ class AuthCubit extends Cubit<AuthStates> {
     emit(AuthLoading());
     try {
       await FirebaseAuth.instance.signOut();
-      await AppLocalStorage.removeUser('user');
+      await AppLocalStorage.removeUser();
       emit(AuthSuccess());
     } catch (e) {
-      emit(AuthError(errorMessage: 'An unknown error occurred.'));
+      log("Error during logout: $e");
+      emit(AuthError(errorMessage: 'An unknown error occurred during logout.'));
     }
   }
 }

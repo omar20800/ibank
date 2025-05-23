@@ -2,21 +2,22 @@ import 'package:hive/hive.dart';
 import 'package:ibank/core/model/user_model.dart';
 
 class AppLocalStorage {
+  static Box? tokenbox;
   static Box<UserModel>? userbox;
 
   static init() async {
     userbox = Hive.box<UserModel>('userbox');
   }
 
-  static cacheUser(String key, UserModel user) async {
-    await userbox?.put(key, user);
+  static cacheUser(UserModel user) async {
+    await userbox?.put('user', user);
   }
 
-  static UserModel? getUser(String key) {
-    return userbox?.get(key);
+  static UserModel? getUser() {
+    return userbox?.get('user');
   }
 
-  static removeUser(String key) async {
-    await userbox?.delete(key);
+  static removeUser() async {
+    await userbox?.delete('user');
   }
 }

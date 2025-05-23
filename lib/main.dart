@@ -12,7 +12,6 @@ import 'package:ibank/firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('tokenbox');
   await Hive.openBox<UserModel>('userbox');
   await AppLocalStorage.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -38,7 +37,7 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'iBank',
         home:
-            AppLocalStorage.getUser('user')?.uid == null
+            AppLocalStorage.getUser()?.uid == null
                 ? const WelcomeScreen()
                 : const MainScreen(),
       ),
