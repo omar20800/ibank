@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ibank/core/model/card_mode.dart';
 import 'package:ibank/core/utils/appcolour.dart';
-import 'package:ibank/core/utils/box_shadow.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/credit_card_widget.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
-import 'package:ibank/core/widgets/picture_widget.dart';
 import 'package:ibank/features/home/presentation/widgets/accounts_tab.dart';
 
 class AccountcardScreen extends StatefulWidget {

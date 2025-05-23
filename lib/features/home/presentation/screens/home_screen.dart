@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ibank/core/model/card_mode.dart';
 import 'package:ibank/core/model/user_model.dart';
 import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/core/utils/appcolour.dart';
