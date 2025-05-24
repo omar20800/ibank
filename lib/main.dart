@@ -12,6 +12,7 @@ import 'package:ibank/firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  Hive.registerAdapter(UserModelAdapter());
   await Hive.openBox<UserModel>('userbox');
   await AppLocalStorage.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

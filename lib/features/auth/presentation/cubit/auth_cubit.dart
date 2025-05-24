@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +35,7 @@ class AuthCubit extends Cubit<AuthStates> {
                 .get();
         if (doc.exists && doc.data() != null) {
           final data = doc.data() as Map<String, dynamic>;
-          AppLocalStorage.cacheUser(UserModel.fromJson(data));
+          await AppLocalStorage.cacheUser(UserModel.fromJson(data));
           emit(AuthSuccess());
         } else {
           log("Error: User data not found in Firestore for UID: ${user.uid}");
@@ -92,7 +91,7 @@ class AuthCubit extends Cubit<AuthStates> {
         'age': 0,
         'criditCards': {},
       });
-      AppLocalStorage.cacheUser(
+      await AppLocalStorage.cacheUser(
         UserModel(
           age: 0,
           balance: 0.0,
