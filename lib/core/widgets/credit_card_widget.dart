@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ibank/core/model/card_mode.dart';
+import 'package:ibank/core/model/card_model.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/features/home/presentation/widgets/serial_number_widget.dart';
@@ -18,7 +18,7 @@ class CreditCardWidget extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 35.w),
         decoration: BoxDecoration(
           image: DecorationImage(
-            fit: BoxFit.fitWidth,
+            fit: BoxFit.cover,
             image: AssetImage('assets/images/${card?.type}.png'),
           ),
         ),

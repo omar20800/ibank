@@ -89,7 +89,6 @@ class AuthCubit extends Cubit<AuthStates> {
         'imageUrl': '',
         'phoneNumber': '',
         'age': 0,
-        'criditCards': {},
       });
       await AppLocalStorage.cacheUser(
         UserModel(

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ibank/core/model/user_model.dart';
@@ -8,6 +9,7 @@ import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 import 'package:ibank/features/welcome/presentation/screens/welcome_screen.dart';
 import 'package:ibank/firebase_options.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +39,14 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'iBank',
+        localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        MonthYearPickerLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'),
+      ],
         home:
             AppLocalStorage.getUser()?.uid == null
                 ? const WelcomeScreen()

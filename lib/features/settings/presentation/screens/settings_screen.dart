@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ibank/core/extentions/extenstions.dart';
+import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/picture_widget.dart';
@@ -78,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
                       children: [
                         SizedBox(height: 80.h),
                         Text(
-                          'Pedri Gonzales',
+                          '${AppLocalStorage.getUser()?.name}',
                           style: getTitle3TextStyle(
                             color: AppColours.primaryColor1,
                           ),

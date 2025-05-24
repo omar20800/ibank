@@ -6,7 +6,7 @@ import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/picture_widget.dart';
 import 'package:ibank/core/widgets/credit_card_widget.dart';
-import 'package:ibank/features/home/presentation/screens/accountcard_screen.dart';
+import 'package:ibank/features/acc&cards/presentation/screens/accountcard_screen.dart';
 import 'package:ibank/features/home/presentation/widgets/home_tile_widget.dart';
 
 class HomeScreen extends StatelessWidget {
