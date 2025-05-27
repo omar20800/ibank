@@ -1,36 +1,45 @@
-name: Android CI/CD Build APK
+name: Flutter Android CI/CD Build APK
 
 on:
   push:
     branches:
-      - main
+      - main # أو master حسب اسم الفرع الرئيسي لديك
   pull_request:
     branches:
-      - main
+      - main # أو master
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # استخدم نظام تشغيل لينكس
 
     steps:
-    - name: Checkout Code
+    - name: Checkout Code # سحب الكود من المستودع
       uses: actions/checkout@v4
 
-    - name: Set up JDK 17 
+    - name: Set up Flutter SDK # إعداد Flutter SDK
+      uses: subosito/flutter-action@v2 # هذا الـ action مخصص لإعداد Flutter
+      with:
+        channel: 'stable' # أو 'beta' أو 'dev' حسب القناة التي تستخدمها
+        cache: true # تفعيل التخزين المؤقت لـ Flutter SDK لتحسين الأداء
+
+    - name: Get Flutter dependencies # جلب الاعتمادات (dependencies) للـ Flutter
+      run: flutter pub get
+
+    - name: Set up JDK 17 # إعداد Java Development Kit (JDK) - مطلوب لبناء الأندرويد
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '17' # استخدم إصدار JDK المناسب (11 أو 17 أو 21)
         distribution: 'temurin'
-        cache: 'gradle'
+        cache: 'gradle' # تفعيل التخزين المؤقت لـ Gradle
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    - name: Grant execute permission for gradlew # إعطاء صلاحيات التنفيذ لـ gradlew
+      run: chmod +x android/gradlew # لاحظ المسار هنا! (سيتم الشرح أدناه)
 
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug
+    - name: Build Debug APK # بناء نسخة الـ APK (نسخة Debug)
+      run: flutter build apk --debug # الأمر الخاص بـ Flutter لبناء الـ APK
 
-    - name: Upload Debug APK
+    - name: Upload Debug APK # رفع الـ APK كـ artifact
       uses: actions/upload-artifact@v4
       with:
         name: app-debug-apk
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: build/app/outputs/flutter-apk/app-debug.apk # المسار الافتراضي لـ APK في Flutter
