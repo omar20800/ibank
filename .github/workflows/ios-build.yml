@@ -38,8 +38,8 @@ jobs:
     - name: Build iOS IPA
       run: |
         flutter build ipa --${{ github.event.inputs.build_type }} \
-          --export-method ${{ github.event.inputs.export_method }} \
-          --target-platform ios-arm64
+          --export-method ${{ github.event.inputs.export_method }}
+
     - name: Archive built IPA
       uses: actions/upload-artifact@v4
       with:
