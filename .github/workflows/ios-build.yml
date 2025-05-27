@@ -1,0 +1,39 @@
+name: Flutter iOS CI/CD Build IPA
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Flutter SDK
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        cache: true
+
+    - name: Get Flutter dependencies
+      run: flutter pub get
+
+    - name: Build iOS IPA
+      run: |
+        flutter build ipa --release \
+          --export-method ad-hoc \
+          --target-platform ios-arm64
+
+
+    - name: Archive built IPA
+      uses: actions/upload-artifact@v4
+      with:
+        name: flutter-ios-ipa
+        path: build/ios/archive/Runner.xcarchive/Products/Applications/*.ipa
