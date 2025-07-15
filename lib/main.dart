@@ -6,7 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ibank/core/model/user_model.dart';
 import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/features/main/presentation/screens/main_screen.dart';
-import 'package:ibank/features/welcome/presentation/screens/welcome_screen.dart';
+import 'package:ibank/features/auth/presentation/screens/welcome/welcome_screen.dart';
 import 'package:ibank/firebase_options.dart';
 
 void main() async {

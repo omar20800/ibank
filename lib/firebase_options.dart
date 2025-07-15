@@ -27,6 +27,21 @@ class DefaultFirebaseOptions {
         return android;
       case TargetPlatform.iOS:
         return ios;
+      case TargetPlatform.macOS:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      case TargetPlatform.windows:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      case TargetPlatform.linux:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for linux - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       default:
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
@@ -35,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAwkk9J-dlPt8irwTpTvI2k8KZ5SZ0GjqI',
-    appId: '1:83879799411:android:b84078e2e1b4bbb00cd806',
-    messagingSenderId: '83879799411',
-    projectId: 'ibank-35e67',
-    storageBucket: 'ibank-35e67.firebasestorage.app',
+    apiKey: 'AIzaSyByEPj8ZwtGcRrCxxV9BAv2dEbFldFBEBg',
+    appId: '1:393552609057:android:b449402559022ef3648860',
+    messagingSenderId: '393552609057',
+    projectId: 'ibank-94dee',
+    storageBucket: 'ibank-94dee.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCB8qqiAVTbBTlb9DvRMI-4jejcI9y3DPE',
-    appId: '1:83879799411:ios:ff444910cd16c6a30cd806',
-    messagingSenderId: '83879799411',
-    projectId: 'ibank-35e67',
-    storageBucket: 'ibank-35e67.firebasestorage.app',
-    iosBundleId: 'com.omar.ibank',
+    apiKey: 'AIzaSyBIG7r5Hc7TO4X0yxDgE_KCKlZ5ANBDG9s',
+    appId: '1:393552609057:ios:677f5319408c06d3648860',
+    messagingSenderId: '393552609057',
+    projectId: 'ibank-94dee',
+    storageBucket: 'ibank-94dee.firebasestorage.app',
+    iosBundleId: 'com.example.ibank',
   );
+
 }

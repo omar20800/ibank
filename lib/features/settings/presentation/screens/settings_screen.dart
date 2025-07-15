@@ -11,7 +11,7 @@ import 'package:ibank/core/widgets/picture_widget.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 import 'package:ibank/features/settings/presentation/widgets/settings_list_widget.dart';
-import 'package:ibank/features/welcome/presentation/screens/welcome_screen.dart';
+import 'package:ibank/features/auth/presentation/screens/welcome/welcome_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
