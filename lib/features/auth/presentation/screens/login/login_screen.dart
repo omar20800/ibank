@@ -5,6 +5,8 @@ import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
 import 'package:ibank/core/widgets/input_field_widget.dart';
+import 'package:ibank/features/auth/presentation/auth_assets.dart';
+import 'package:ibank/features/auth/presentation/auth_constants.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 import 'package:ibank/features/auth/presentation/screens/register/register_screen.dart';
@@ -32,7 +34,7 @@ class LoginScreen extends StatelessWidget {
             icon: Icon(Icons.arrow_back_ios, color: AppColours.naturalColor6),
           ),
           title: Text(
-            'Sign in',
+            AuthConstants.logintitle,
             style: getTitle2TextStyle(color: AppColours.naturalColor6),
           ),
         ),
@@ -53,7 +55,7 @@ class LoginScreen extends StatelessWidget {
               } else if (state is AuthLoading) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Loading...'),
+                    content: Text(AuthConstants.loading),
                     duration: const Duration(seconds: 2),
                     backgroundColor: AppColours.primaryColor2,
                   ),
@@ -82,26 +84,26 @@ class LoginScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Welcome Back',
+                        AuthConstants.loginwelcome,
                         style: getTitle1TextStyle(
                           color: AppColours.primaryColor1,
                         ),
                       ),
                       Text(
-                        'Hello there, sign in to continue',
+                        AuthConstants.logindescription,
                         style: getCaption2TextStyle(),
                       ),
                       const SizedBox(height: 20),
-                      Center(child: Image.asset('assets/images/Login.png')),
+                      Center(child: Image.asset(AuthAssets.loginlogo)),
                       const SizedBox(height: 20),
                       InputFieldWidget(
-                        hint: 'Email',
+                        hint: AuthConstants.emailhint,
                         keyboardType: TextInputType.emailAddress,
                         controller: emailController,
                       ),
                       const SizedBox(height: 20),
                       InputFieldWidget(
-                        hint: 'Password',
+                        hint: AuthConstants.passwordhint,
                         keyboardType: TextInputType.number,
                         controller: passwordController,
                         isPassword: true,
@@ -112,7 +114,7 @@ class LoginScreen extends StatelessWidget {
                           TextButton(
                             onPressed: () {},
                             child: Text(
-                              'Forgot Password?',
+                              AuthConstants.forgotpassword,
                               style: getCaption2TextStyle(
                                 color: AppColours.primaryColor1,
                               ),
@@ -130,18 +132,18 @@ class LoginScreen extends StatelessWidget {
                             );
                           }
                         },
-                        text: 'Sign in',
+                        text: AuthConstants.signinbutton,
                       ),
                       Spacer(),
                       Center(
-                        child: Image.asset('assets/images/Fingerprint.png'),
+                        child: Image.asset(AuthAssets.biometriclogo),
                       ),
                       Spacer(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Don\'t have an account?',
+                            AuthConstants.donthaveaccount,
                             style: getCaption2TextStyle(),
                           ),
                           TextButton(
@@ -149,7 +151,7 @@ class LoginScreen extends StatelessWidget {
                               context.pushReplacement(RegisterScreen());
                             },
                             child: Text(
-                              'Sign up',
+                              AuthConstants.signupbutton,
                               style: getCaption2TextStyle(
                                 color: AppColours.primaryColor1,
                               ),

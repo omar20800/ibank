@@ -18,6 +18,8 @@ class UserModel {
   int? age;
   @HiveField(6)
   double? balance;
+  DateTime? lastLogin;
+  DateTime? createdAt;
 
   UserModel({
     this.uid,
@@ -27,6 +29,8 @@ class UserModel {
     this.phoneNumber,
     this.age,
     this.balance,
+    this.lastLogin,
+    this.createdAt,
   });
   UserModel.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -46,6 +50,8 @@ class UserModel {
     data['phoneNumber'] = phoneNumber;
     data['age'] = age;
     data['balance'] = balance;
+    data['lastLogin'] = lastLogin;
+    data['createdAt'] = createdAt;
     return data;
   }
 
@@ -57,6 +63,8 @@ class UserModel {
     String? phoneNumber,
     int? age,
     double? balance,
+    DateTime? lastLogin,
+    DateTime? createdAt,
   }) => UserModel(
     uid: uid ?? this.uid,
     name: name ?? this.name,
@@ -65,5 +73,7 @@ class UserModel {
     phoneNumber: phoneNumber ?? this.phoneNumber,
     age: age ?? this.age,
     balance: balance ?? this.balance,
+    lastLogin: lastLogin ?? this.lastLogin,
+    createdAt: createdAt ?? this.createdAt,
   );
 }

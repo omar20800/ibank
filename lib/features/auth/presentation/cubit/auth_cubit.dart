@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ibank/core/model/user_model.dart';
 import 'package:ibank/core/service/auth_service.dart';
 import 'package:ibank/core/service/local_helper.dart';
+import 'package:ibank/features/auth/presentation/auth_constants.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
@@ -19,18 +20,18 @@ class AuthCubit extends Cubit<AuthStates> {
       );
       User? user = credential.user;
       if (user == null) {
-        emit(AuthError(errorMessage: 'No user found after login.'));
+        emit(AuthError(errorMessage: AuthConstants.loginunexpectederror));
         return;
       }
-      await FirebaseFirestore.instance.collection('Users').doc(user.uid).update(
-        {'lastLogin': DateTime.now()},
+      await FirebaseFirestore.instance.collection(AuthConstants.userscollection).doc(user.uid).update(
+        {AuthConstants.lastlogin : DateTime.now()},
       );
       final bool biometricsSuccess =
           await AuthService().authenticateWithBiometrics();
       if (biometricsSuccess) {
         final DocumentSnapshot doc =
             await FirebaseFirestore.instance
-                .collection("Users")
+                .collection(AuthConstants.userscollection)
                 .doc(user.uid)
                 .get();
         if (doc.exists && doc.data() != null) {
@@ -38,27 +39,25 @@ class AuthCubit extends Cubit<AuthStates> {
           await AppLocalStorage.cacheUser(UserModel.fromJson(data));
           emit(AuthSuccess());
         } else {
-          log("Error: User data not found in Firestore for UID: ${user.uid}");
-          emit(AuthError(errorMessage: 'User data not found.'));
+          emit(AuthError(errorMessage: AuthConstants.userdatanotfound));
         }
       } else {
         emit(
-          AuthError(errorMessage: 'Authentication failed. Please try again.'),
+          AuthError(errorMessage: AuthConstants.loginunexpectederror),
         );
       }
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        emit(AuthError(errorMessage: 'No user found for that email.'));
-      } else if (e.code == 'wrong-password') {
-        emit(AuthError(errorMessage: 'Wrong password provided for that user.'));
+      if (e.code == AuthConstants.userdatanotfounderrorcode) {
+        emit(AuthError(errorMessage: AuthConstants.userdatanotfound));
+      } else if (e.code == AuthConstants.wrongpassworderrorcode) {
+        emit(AuthError(errorMessage: AuthConstants.wrongpassworderrormessage));
       } else {
         emit(
-          AuthError(errorMessage: 'An unknown error occurred: ${e.message}'),
+          AuthError(errorMessage: AuthConstants.loginunexpectederror + e.message.toString()),
         );
       }
     } catch (e) {
-      log("Unexpected error during login: $e");
-      emit(AuthError(errorMessage: 'An unexpected error occurred.'));
+      emit(AuthError(errorMessage: AuthConstants.loginunexpectederror + e.toString()));
     }
   }
 
@@ -76,22 +75,10 @@ class AuthCubit extends Cubit<AuthStates> {
           );
       User? user = credential.user;
       if (user == null) {
-        emit(AuthError(errorMessage: 'Failed to create user.'));
+        emit(AuthError(errorMessage: AuthConstants.registerunexpectederror));
         return;
       }
-      await FirebaseFirestore.instance.collection('Users').doc(user.uid).set({
-        'uid': user.uid,
-        'name': name,
-        'email': emailAddress,
-        'balance': 0.0,
-        'createdAt': DateTime.now(),
-        'lastLogin': DateTime.now(),
-        'imageUrl': '',
-        'phoneNumber': '',
-        'age': 0,
-      });
-      await AppLocalStorage.cacheUser(
-        UserModel(
+      UserModel userdata = UserModel(
           age: 0,
           balance: 0.0,
           uid: user.uid,
@@ -99,24 +86,27 @@ class AuthCubit extends Cubit<AuthStates> {
           email: emailAddress,
           imageUrl: '',
           phoneNumber: '',
-        ),
+          lastLogin: DateTime.now(),
+          createdAt: DateTime.now()
       );
+      await FirebaseFirestore.instance.collection(AuthConstants.userscollection).doc(user.uid).set(userdata.toJson());
+      await AppLocalStorage.cacheUser(userdata);
       emit(AuthSuccess());
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        emit(AuthError(errorMessage: 'The password provided is too weak.'));
-      } else if (e.code == 'email-already-in-use') {
+      if (e.code == AuthConstants.weakpassworderrorcode) {
+        emit(AuthError(errorMessage: AuthConstants.weakpassworderrormessage));
+      } else if (e.code == AuthConstants.emailalreadyexistserrorcode) {
         emit(
-          AuthError(errorMessage: 'The account already exists for that email.'),
+          AuthError(errorMessage: AuthConstants.emailalreadyexistserrormessage),
         );
       } else {
         emit(
-          AuthError(errorMessage: 'An unknown error occurred: ${e.message}'),
+          AuthError(errorMessage: AuthConstants.registerunexpectederror + e.message.toString()),
         );
       }
     } catch (e) {
-      log("Unexpected error during registration: $e");
-      emit(AuthError(errorMessage: 'An unexpected error occurred.'));
+      log(AuthConstants.registerunexpectederror + e.toString());
+      emit(AuthError(errorMessage: AuthConstants.registerunexpectederror + e.toString()));
     }
   }
 
@@ -127,8 +117,8 @@ class AuthCubit extends Cubit<AuthStates> {
       await AppLocalStorage.removeUser();
       emit(AuthSuccess());
     } catch (e) {
-      log("Error during logout: $e");
-      emit(AuthError(errorMessage: 'An unknown error occurred during logout.'));
+      log(AuthConstants.logoutunexpectederror + e.toString());
+      emit(AuthError(errorMessage: AuthConstants.logoutunexpectederror + e.toString()));
     }
   }
 }

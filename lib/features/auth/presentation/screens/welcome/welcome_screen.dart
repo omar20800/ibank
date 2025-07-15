@@ -4,6 +4,7 @@ import 'package:ibank/core/extentions/extenstions.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
+import 'package:ibank/features/auth/presentation/auth_constants.dart';
 import 'package:ibank/features/auth/presentation/screens/login/login_screen.dart';
 import 'package:ibank/features/auth/presentation/screens/register/register_screen.dart';
 
@@ -14,7 +15,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DoubleTapToExit(
       snackBar: const SnackBar(
-        content: Text('Tap again to exit'),
+        content: Text(AuthConstants.doubletaptoexit),
         duration: Duration(seconds: 1),
         backgroundColor: AppColours.semanticColor1,
       ),
@@ -28,16 +29,16 @@ class WelcomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Welcome to iBank',
+                  AuthConstants.welcometitle,
                   style: getTitle1TextStyle(color: AppColours.naturalColor6),
                 ),
                 Text(
-                  'Your digital banking solution',
+                  AuthConstants.welcomesubtitle,
                   style: getTitle3TextStyle(color: AppColours.naturalColor6),
                 ),
                 Spacer(),
                 CustomButtonWidget(
-                  text: 'Sign In',
+                  text: AuthConstants.signinbutton,
                   bgcolor: AppColours.primaryColor2,
                   textColor: AppColours.naturalColor6,
                   onPressed: () {
@@ -46,7 +47,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 CustomButtonWidget(
-                  text: 'Sign Up',
+                  text: AuthConstants.signupbutton,
                   bgcolor: AppColours.naturalColor6,
                   textColor: AppColours.primaryColor1,
                   onPressed: () {

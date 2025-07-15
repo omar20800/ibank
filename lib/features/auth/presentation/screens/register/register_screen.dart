@@ -5,6 +5,8 @@ import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
 import 'package:ibank/core/widgets/input_field_widget.dart';
+import 'package:ibank/features/auth/presentation/auth_assets.dart';
+import 'package:ibank/features/auth/presentation/auth_constants.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 import 'package:ibank/features/auth/presentation/screens/login/login_screen.dart';
@@ -43,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             icon: Icon(Icons.arrow_back_ios, color: AppColours.naturalColor6),
           ),
           title: Text(
-            'Sign up',
+            AuthConstants.registertitle,
             style: getTitle2TextStyle(color: AppColours.naturalColor6),
           ),
         ),
@@ -64,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               } else if (state is AuthLoading) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Loading...'),
+                    content: Text(AuthConstants.loading),
                     duration: const Duration(seconds: 2),
                     backgroundColor: AppColours.primaryColor2,
                   ),
@@ -97,34 +99,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Welcome to us,',
+                              AuthConstants.registerwelcome,
                               style: getTitle1TextStyle(
                                 color: AppColours.primaryColor1,
                               ),
                             ),
                             Text(
-                              'Hello there, create New account',
+                              AuthConstants.registerdescription,
                               style: getCaption2TextStyle(),
                             ),
                             const SizedBox(height: 20),
                             Center(
-                              child: Image.asset('assets/images/Register.png'),
+                              child: Image.asset(AuthAssets.registerlogo),
                             ),
                             const SizedBox(height: 20),
                             InputFieldWidget(
-                              hint: 'Full Name',
+                              hint:AuthConstants.namehint,
                               keyboardType: TextInputType.name,
                               controller: nameController,
                             ),
                             const SizedBox(height: 20),
                             InputFieldWidget(
-                              hint: 'Email',
+                              hint: AuthConstants.emailhint,
                               keyboardType: TextInputType.emailAddress,
                               controller: emailController,
                             ),
                             const SizedBox(height: 20),
                             InputFieldWidget(
-                              hint: 'Password',
+                              hint: AuthConstants.passwordhint,
                               keyboardType: TextInputType.number,
                               controller: passwordController,
                               isPassword: true,
@@ -142,13 +144,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   activeColor: AppColours.primaryColor1,
                                 ),
                                 Text(
-                                  'I agree to the',
+                                  AuthConstants.agreeterms,
                                   style: getCaption2TextStyle(),
                                 ),
                                 TextButton(
                                   onPressed: () {},
                                   child: Text(
-                                    'terms and conditions',
+                                    AuthConstants.termsandconditions,
                                     style: getCaption2TextStyle(
                                       color: AppColours.primaryColor1,
                                     ),
@@ -168,14 +170,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   );
                                 }
                               },
-                              text: 'Sign up',
+                              text: AuthConstants.signupbutton,
                             ),
                             Spacer(),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Already have an account?',
+                                  AuthConstants.alreadyhaveaccount,
                                   style: getCaption2TextStyle(),
                                 ),
                                 TextButton(
@@ -183,7 +185,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     context.pushReplacement(LoginScreen());
                                   },
                                   child: Text(
-                                    'Sign In',
+                                    AuthConstants.signinbutton,
                                     style: getCaption2TextStyle(
                                       color: AppColours.primaryColor1,
                                     ),
