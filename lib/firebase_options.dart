@@ -65,5 +65,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'ibank-94dee.firebasestorage.app',
     iosBundleId: 'com.example.ibank',
   );
-
 }

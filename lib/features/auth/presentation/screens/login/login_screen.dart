@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ibank/core/extentions/extenstions.dart';
+import 'package:ibank/core/service/dialogs.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
@@ -28,7 +29,7 @@ class LoginScreen extends StatelessWidget {
           backgroundColor: AppColours.primaryColor1,
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
             },
             icon: Icon(Icons.arrow_back_ios, color: AppColours.naturalColor6),
           ),
@@ -42,23 +43,13 @@ class LoginScreen extends StatelessWidget {
           child: BlocConsumer<AuthCubit, AuthStates>(
             listener: (context, state) {
               if (state is AuthError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.errorMessage),
-                    duration: const Duration(seconds: 2),
-                    backgroundColor: AppColours.semanticColor1,
-                  ),
-                );
+                context.pop();
+                Dialogs.showErrorDialog(context, state.errorMessage);
               } else if (state is AuthSuccess) {
+                context.pop();
                 context.pushAndRemoveUntil(MainScreen());
               } else if (state is AuthLoading) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(AuthConstants.loading),
-                    duration: const Duration(seconds: 2),
-                    backgroundColor: AppColours.primaryColor2,
-                  ),
-                );
+                Dialogs.showLoadingDialog(context);
               }
             },
             builder: (context, state) {
@@ -134,9 +125,7 @@ class LoginScreen extends StatelessWidget {
                         text: AuthConstants.signinbutton,
                       ),
                       Spacer(),
-                      Center(
-                        child: Image.asset(AuthAssets.biometriclogo),
-                      ),
+                      Center(child: Image.asset(AuthAssets.biometriclogo)),
                       Spacer(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

@@ -17,8 +17,8 @@ class CardModel {
     type = getcardtype(cardnumber);
   }
   CardModel.fromJson(Map<String, dynamic> json)
-    : id = json['id'], 
-    cardnumber = json['cardnumber'],
+    : id = json['id'],
+      cardnumber = json['cardnumber'],
       cardholdername = json['cardholdername'],
       expirationdate = json['expirationdate'],
       balance = json['balance'] ?? 0.0,
@@ -33,6 +33,7 @@ class CardModel {
       'type': type,
     };
   }
+
   String? getcardtype(String cardnumber) {
     if (cardnumber.startsWith('4')) {
       return 'visa';

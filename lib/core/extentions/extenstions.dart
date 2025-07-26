@@ -19,4 +19,8 @@ extension Navigation on BuildContext {
       (route) => false,
     );
   }
+
+  pop() {
+    Navigator.pop(this);
+  }
 }

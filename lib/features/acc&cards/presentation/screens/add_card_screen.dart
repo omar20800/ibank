@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ibank/core/extentions/extenstions.dart';
 import 'package:ibank/core/functions/validation.dart';
 import 'package:ibank/core/model/card_model.dart';
 import 'package:ibank/core/utils/appcolour.dart';
@@ -45,7 +46,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     content: Text(state.message),
                   ),
                 );
-                Navigator.pop(context);
+                context.pop();
               } else if (state is AddCardErrorState) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

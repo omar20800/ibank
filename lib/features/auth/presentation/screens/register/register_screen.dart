@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ibank/core/extentions/extenstions.dart';
+import 'package:ibank/core/service/dialogs.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
@@ -39,7 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           backgroundColor: AppColours.primaryColor1,
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
             },
             icon: Icon(Icons.arrow_back_ios, color: AppColours.naturalColor6),
           ),
@@ -53,23 +54,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: BlocConsumer<AuthCubit, AuthStates>(
             listener: (context, state) {
               if (state is AuthError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.errorMessage),
-                    duration: const Duration(seconds: 2),
-                    backgroundColor: AppColours.semanticColor1,
-                  ),
-                );
+                context.pop();
+                Dialogs.showErrorDialog(context, state.errorMessage);
               } else if (state is AuthSuccess) {
+                context.pop();
                 context.pushAndRemoveUntil(MainScreen());
               } else if (state is AuthLoading) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(AuthConstants.loading),
-                    duration: const Duration(seconds: 2),
-                    backgroundColor: AppColours.primaryColor2,
-                  ),
-                );
+                Dialogs.showLoadingDialog(context);
               }
             },
             builder: (context, state) {
@@ -108,12 +99,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               style: getCaption2TextStyle(),
                             ),
                             const SizedBox(height: 20),
-                            Center(
-                              child: Image.asset(AuthAssets.registerlogo),
-                            ),
+                            Center(child: Image.asset(AuthAssets.registerlogo)),
                             const SizedBox(height: 20),
                             InputFieldWidget(
-                              hint:AuthConstants.namehint,
+                              hint: AuthConstants.namehint,
                               keyboardType: TextInputType.name,
                               controller: nameController,
                             ),
