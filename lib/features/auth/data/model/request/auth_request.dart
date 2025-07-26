@@ -6,7 +6,7 @@ class AuthRequest {
   String? phoneNumber;
   String? imageUrl;
   int? age;
-  
+
   AuthRequest({
     required this.email,
     required this.password,
@@ -14,7 +14,7 @@ class AuthRequest {
     this.name,
     this.phoneNumber,
     this.imageUrl,
-    this.age
+    this.age,
   });
 
   Map<String, dynamic> toJson() => {
@@ -24,7 +24,6 @@ class AuthRequest {
     'passwordConfirm': passwordConfirm,
     'phoneNumber': phoneNumber,
     'imageUrl': imageUrl,
-    'age': age
+    'age': age,
   };
-  
 }

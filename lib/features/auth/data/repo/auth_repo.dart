@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:ibank/core/service/dio_provider.dart';
 import 'package:ibank/features/auth/data/model/request/auth_login_request.dart';
 import 'package:ibank/features/auth/data/model/request/auth_request.dart';
-import 'package:ibank/features/auth/data/model/response/auth_response.dart';
+import 'package:ibank/features/auth/data/model/response/auth_response/auth_response.dart';
 
 class AuthRepo {
   Future<AuthResponse?> login({
@@ -12,7 +12,8 @@ class AuthRepo {
     try {
       var response = await DioProvider.post(
         endpoint: 'auth/login',
-        data: AuthLoginRequest(email: emailAddress, password: password).toJson(),
+        data:
+            AuthLoginRequest(email: emailAddress, password: password).toJson(),
       );
       if (response.statusCode == 201) {
         return AuthResponse.fromJson(response.data);
@@ -20,7 +21,7 @@ class AuthRepo {
         return null;
       }
     } on DioException catch (e) {
-      throw e.response?.data['detail'] ?? 'Something went wrong';
+      throw e.response?.data['message'] ?? 'Something went wrong';
     } catch (e) {
       throw 'Unexpected error';
     }
@@ -35,12 +36,13 @@ class AuthRepo {
     try {
       var response = await DioProvider.post(
         endpoint: 'auth/register',
-        data: AuthRequest(
-          name: name,
-          email: emailAddress,
-          password: password,
-          passwordConfirm: passwordConfirm,
-        ).toJson(),
+        data:
+            AuthRequest(
+              name: name,
+              email: emailAddress,
+              password: password,
+              passwordConfirm: passwordConfirm,
+            ).toJson(),
       );
       if (response.statusCode == 201) {
         return AuthResponse.fromJson(response.data);
@@ -48,7 +50,7 @@ class AuthRepo {
         return null;
       }
     } on DioException catch (e) {
-      throw e.response?.data['detail'] ?? 'Something went wrong';
+      throw e.response?.data['message'] ?? 'Something went wrong';
     } catch (e) {
       throw 'Unexpected error';
     }
@@ -65,8 +67,10 @@ class AuthRepo {
       } else {
         return null;
       }
+    } on DioException catch (e) {
+      throw e.response?.data['message'] ?? 'Something went wrong';
     } catch (e) {
-      throw 'Logout failed';
+      throw 'Unexpected error';
     }
   }
 }

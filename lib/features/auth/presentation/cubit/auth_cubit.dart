@@ -14,20 +14,22 @@ class AuthCubit extends Cubit<AuthStates> {
         emailAddress: emailAddress,
         password: password,
       );
-      if (value != null) {
+      if (value?.data != null) {
         emit(AuthSuccess());
-        AppLocalStorage.cacheToken(value.token!);
-        AppLocalStorage.cacheUser(UserModel(
-          age: value.age,
-          balance: value.balance,
-          createdAt: value.createdAt,
-          email: value.email,
-          imageUrl: value.imageUrl,
-          lastLogin: value.lastLogin,
-          name: value.name,
-          phoneNumber: value.phoneNumber,
-          uid: value.id,
-        ));
+        AppLocalStorage.cacheToken(value!.data!.token!);
+        AppLocalStorage.cacheUser(
+          UserModel(
+            age: value.data?.age,
+            balance: value.data?.balance,
+            createdAt: value.data?.createdAt,
+            email: value.data?.email,
+            imageUrl: value.data?.imageUrl,
+            lastLogin: value.data?.lastLogin,
+            name: value.data?.name,
+            phoneNumber: value.data?.phoneNumber,
+            uid: value.data?.id,
+          ),
+        );
       } else {
         emit(AuthError(errorMessage: 'Unknown error'));
       }
@@ -49,20 +51,22 @@ class AuthCubit extends Cubit<AuthStates> {
         password: password,
         passwordConfirm: password,
       );
-      if (value != null) {
+      if (value?.data != null) {
         emit(AuthSuccess());
-        AppLocalStorage.cacheToken(value.token!);
-        AppLocalStorage.cacheUser(UserModel(
-          age: value.age,
-          balance: value.balance,
-          createdAt: value.createdAt,
-          email: value.email,
-          imageUrl: value.imageUrl,
-          lastLogin: value.lastLogin,
-          name: value.name,
-          phoneNumber: value.phoneNumber,
-          uid: value.id,
-        ));
+        AppLocalStorage.cacheToken(value!.data!.token!);
+        AppLocalStorage.cacheUser(
+          UserModel(
+            age: value.data?.age,
+            balance: value.data?.balance,
+            createdAt: value.data?.createdAt,
+            email: value.data?.email,
+            imageUrl: value.data?.imageUrl,
+            lastLogin: value.data?.lastLogin,
+            name: value.data?.name,
+            phoneNumber: value.data?.phoneNumber,
+            uid: value.data?.id,
+          ),
+        );
       } else {
         emit(AuthError(errorMessage: 'Unknown error'));
       }

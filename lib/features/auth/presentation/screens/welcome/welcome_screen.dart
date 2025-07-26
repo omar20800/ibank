@@ -71,8 +71,10 @@ class WelcomeScreen extends StatelessWidget {
                         final isSupported =
                             await AuthService().checkBiometricSupport();
                         if (isSupported) {
-                          final authenticated =
-                              await AuthService().authenticateWithBiometrics('Authenticate to login');
+                          final authenticated = await AuthService()
+                              .authenticateWithBiometrics(
+                                'Authenticate to login',
+                              );
                           if (authenticated) {
                             context.pushTo(MainScreen());
                           } else {

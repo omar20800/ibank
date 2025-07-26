@@ -6,7 +6,7 @@ class AuthLoginRequest {
   AuthLoginRequest({this.email, this.phonenumber, required this.password});
 
   Map<String, dynamic> toJson() => {
-        'identifier' : email ?? phonenumber,
-        'password': password
+    'identifier': email ?? phonenumber,
+    'password': password,
   };
 }

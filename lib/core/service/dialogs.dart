@@ -48,7 +48,9 @@ class Dialogs {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    const CircularProgressIndicator(color: AppColours.primaryColor1,),
+                    const CircularProgressIndicator(
+                      color: AppColours.primaryColor1,
+                    ),
                     const SizedBox(height: 20),
                     Expanded(
                       child: Text(

@@ -1,4 +1,4 @@
-class AuthResponse {
+class Data {
   String? id;
   String? name;
   String? email;
@@ -9,9 +9,8 @@ class AuthResponse {
   DateTime? lastLogin;
   DateTime? createdAt;
   String? token;
-  String? message;
 
-  AuthResponse({
+  Data({
     this.id,
     this.name,
     this.email,
@@ -22,10 +21,9 @@ class AuthResponse {
     this.lastLogin,
     this.createdAt,
     this.token,
-    this.message,
   });
 
-  factory AuthResponse.fromJson(Map<String, dynamic> json) => AuthResponse(
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json['_id'] as String?,
     name: json['name'] as String?,
     email: json['email'] as String?,
@@ -42,7 +40,6 @@ class AuthResponse {
             ? null
             : DateTime.parse(json['createdAt'] as String),
     token: json['token'] as String?,
-    message: json['message'] as String?,
   );
 
   Map<String, dynamic> toJson() => {
