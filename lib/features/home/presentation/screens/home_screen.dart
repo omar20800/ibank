@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
                 child: Row(
                   children: [
-                    PictureWidget(),
+                    PictureWidget(imageURL: user?.imageUrl),
                     SizedBox(width: 20.w),
                     Text(
                       'Hi, ${user?.name}',

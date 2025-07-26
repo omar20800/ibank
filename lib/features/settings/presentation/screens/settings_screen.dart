@@ -1,9 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ibank/core/extentions/extenstions.dart';
+import 'package:ibank/core/model/user_model.dart';
 import 'package:ibank/core/service/dialogs.dart';
 import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/core/utils/appcolour.dart';
@@ -15,7 +14,8 @@ import 'package:ibank/features/settings/presentation/widgets/settings_list_widge
 import 'package:ibank/features/auth/presentation/screens/welcome/welcome_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  SettingsScreen({super.key});
+  final UserModel user = AppLocalStorage.getUser()!;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -78,7 +78,7 @@ class SettingsScreen extends StatelessWidget {
                       children: [
                         SizedBox(height: 80.h),
                         Text(
-                          '${AppLocalStorage.getUser()?.name}',
+                          '${user.name}',
                           style: getTitle3TextStyle(
                             color: AppColours.primaryColor1,
                           ),
@@ -89,7 +89,11 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                PictureWidget(width: 100.w, height: 100.h),
+                PictureWidget(
+                  imageURL: user.imageUrl,
+                  width: 100.w,
+                  height: 100.h,
+                ),
               ],
             ),
           );

@@ -38,9 +38,7 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'iBank',
-        home: AppLocalStorage.getToken() == null
-            ? const WelcomeScreen()
-            : const MainScreen(),
+        home: const WelcomeScreen()
       ),
     );
   }

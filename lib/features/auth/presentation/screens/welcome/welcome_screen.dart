@@ -1,12 +1,15 @@
 import 'package:double_tap_to_exit/double_tap_to_exit.dart';
 import 'package:flutter/material.dart';
 import 'package:ibank/core/extentions/extenstions.dart';
+import 'package:ibank/core/service/auth_service.dart';
+import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
 import 'package:ibank/features/auth/presentation/auth_constants.dart';
 import 'package:ibank/features/auth/presentation/screens/login/login_screen.dart';
 import 'package:ibank/features/auth/presentation/screens/register/register_screen.dart';
+import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -41,8 +44,49 @@ class WelcomeScreen extends StatelessWidget {
                   text: AuthConstants.signinbutton,
                   bgcolor: AppColours.primaryColor2,
                   textColor: AppColours.naturalColor6,
-                  onPressed: () {
-                    context.pushTo(LoginScreen());
+                  onPressed: () async {
+                    final token = AppLocalStorage.getToken();
+                    final user = AppLocalStorage.getUser();
+                    if (token != null) {
+                      final result = await showDialog(
+                        context: context,
+                        builder:
+                            (context) => AlertDialog(
+                              title: Text('Biometric Login'),
+                              content: Text('Are you ${user?.name}'),
+                              actions: [
+                                TextButton(
+                                  onPressed:
+                                      () => Navigator.pop(context, false),
+                                  child: Text('No'),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: Text('Yes'),
+                                ),
+                              ],
+                            ),
+                      );
+                      if (result == true) {
+                        final isSupported =
+                            await AuthService().checkBiometricSupport();
+                        if (isSupported) {
+                          final authenticated =
+                              await AuthService().authenticateWithBiometrics('Authenticate to login');
+                          if (authenticated) {
+                            context.pushTo(MainScreen());
+                          } else {
+                            context.pushTo(LoginScreen());
+                          }
+                        } else {
+                          context.pushTo(LoginScreen());
+                        }
+                      } else {
+                        context.pushTo(LoginScreen());
+                      }
+                    } else {
+                      context.pushTo(LoginScreen());
+                    }
                   },
                 ),
                 SizedBox(height: 20),

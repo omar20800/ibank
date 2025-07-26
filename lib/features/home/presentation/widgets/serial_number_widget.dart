@@ -18,7 +18,7 @@ class _SerialNumberWidgetState extends State<SerialNumberWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        AuthService().authenticateWithBiometrics().then((value) {
+        AuthService().authenticateWithBiometrics('Please authenticate').then((value) {
           if (value == true) {
             setState(() {
               isAuthenticated = true;
