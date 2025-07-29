@@ -1,4 +1,5 @@
 import 'package:ibank/core/model/card_model.dart';
+import 'package:ibank/features/acc&cards/data/models/response/get_cards_response/datum.dart';
 
 class AccCardStates {}
 
@@ -6,18 +7,19 @@ class AccCardInitialState extends AccCardStates {}
 
 class AccCardLoadingState extends AccCardStates {}
 
-class AddCardSuccessState extends AccCardStates {
+class DeleteCardSuccessState extends AccCardStates {
   final String message;
-  AddCardSuccessState({required this.message});
+  DeleteCardSuccessState({required this.message});
 }
 
-class AddCardErrorState extends AccCardStates {
+class DeleteCardErrorState extends AccCardStates {
   final String error;
-  AddCardErrorState({required this.error});
+  DeleteCardErrorState({required this.error});
+  
 }
 
 class GetCardsSuccessState extends AccCardStates {
-  final List<CardModel> cards;
+  final List<Datum> cards;
   GetCardsSuccessState({required this.cards});
 }
 

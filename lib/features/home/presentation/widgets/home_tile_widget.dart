@@ -11,18 +11,25 @@ class HomeTileWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.iconPath,
-    required this.destination,
+    this.destination, this.onTap,
   });
   final String title;
   final String iconPath;
-  final Widget destination;
+  final Widget? destination;
+  final Function? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: InkWell(
         onTap: () {
-          context.pushTo(destination);
+          if (onTap != null) {
+            onTap!();
+          } else if (destination != null) {
+            context.pushTo(destination!);
+          } else {
+            
+          }
         },
         child: Container(
           decoration: BoxDecoration(

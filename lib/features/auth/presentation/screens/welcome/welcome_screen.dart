@@ -76,7 +76,7 @@ class WelcomeScreen extends StatelessWidget {
                                 'Authenticate to login',
                               );
                           if (authenticated) {
-                            context.pushTo(MainScreen());
+                            context.pushAndRemoveUntil(MainScreen());
                           } else {
                             context.pushTo(LoginScreen());
                           }

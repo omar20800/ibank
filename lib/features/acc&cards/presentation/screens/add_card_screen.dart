@@ -4,12 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ibank/core/extentions/extenstions.dart';
 import 'package:ibank/core/functions/validation.dart';
 import 'package:ibank/core/model/card_model.dart';
+import 'package:ibank/core/service/dialogs.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
 import 'package:ibank/core/widgets/input_field_widget.dart';
-import 'package:ibank/features/acc&cards/presentation/cubit/acc_card_cubit.dart';
-import 'package:ibank/features/acc&cards/presentation/cubit/acc_card_states.dart';
+import 'package:ibank/features/acc&cards/presentation/cubit/add_card_cubit.dart';
+import 'package:ibank/features/acc&cards/presentation/cubit/add_card_states.dart';
+import 'package:ibank/features/acc&cards/presentation/screens/accountcard_screen.dart';
+import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 
 class AddCardScreen extends StatefulWidget {
   AddCardScreen({super.key});
@@ -21,6 +24,8 @@ class AddCardScreen extends StatefulWidget {
   final TextEditingController? expirationDateController =
       TextEditingController();
 
+  final TextEditingController? cvvController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   State<AddCardScreen> createState() => _AddCardScreenState();
@@ -29,31 +34,36 @@ class AddCardScreen extends StatefulWidget {
 class _AddCardScreenState extends State<AddCardScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AccCardCubit>(
-      create: (context) => AccCardCubit(),
+    return BlocProvider(
+      create: (context) => AddCardCubit(),
       child: Scaffold(
         appBar: AppBar(
           title: Text('Add New Card', style: getTitle2TextStyle()),
         ),
         body: Form(
           key: widget._formKey,
-          child: BlocConsumer<AccCardCubit, AccCardStates>(
+          child: BlocConsumer<AddCardCubit, AddCardStates>(
             listener: (context, state) {
-              if (state is AddCardSuccessState) {
+              if (state is AddCardLoadingState) {
+                Dialogs.showLoadingDialog(context);
+              } else if (state is AddCardSuccessState) {
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).pop();
+                context.pushAndRemoveUntil(MainScreen());
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     backgroundColor: AppColours.semanticColor4,
                     content: Text(state.message),
                   ),
                 );
-                context.pop();
               } else if (state is AddCardErrorState) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: AppColours.semanticColor1,
-                    content: Text(state.error),
-                  ),
-                );
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).pop();
+                Dialogs.showErrorDialog(context, state.error);
               }
             },
             builder: (context, state) {
@@ -84,12 +94,41 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       controller: widget.cardHolderNameController,
                     ),
                     const SizedBox(height: 10.0),
-                    Text('Expiration Date', style: getCaption1TextStyle()),
-                    const SizedBox(height: 10.0),
-                    InputFieldWidget(
-                      hint: 'MM/YY',
-                      dateyearpicker: true,
-                      controller: widget.expirationDateController,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Expiration Date',
+                                style: getCaption1TextStyle(),
+                              ),
+                              const SizedBox(height: 10.0),
+                              InputFieldWidget(
+                                hint: 'MM/YY',
+                                dateyearpicker: true,
+                                controller: widget.expirationDateController,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 20.0),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('CVV', style: getCaption1TextStyle()),
+                              const SizedBox(height: 10.0),
+                              InputFieldWidget(
+                                hint: 'Enter CVV',
+                                keyboardType: TextInputType.number,
+                                controller: widget.cvvController,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     const Spacer(),
                     CustomButtonWidget(
@@ -97,19 +136,25 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       onPressed: () {
                         if (widget._formKey.currentState!.validate()) {
                           final cardNumber =
-                              widget.cardNumberController!.text.trim();
+                              widget.cardNumberController!.text
+                                  .replaceAll(' ', '')
+                                  .replaceAll('-', '')
+                                  .trim();
                           final cardHolderName =
                               widget.cardHolderNameController!.text
                                   .toUpperCase()
                                   .trim();
                           final expirationDate =
                               widget.expirationDateController!.text.trim();
+                          final cvv =
+                              widget.cvvController!.text.substring(0, 3).trim();
                           final CardModel newCard = CardModel(
                             cardnumber: cardNumber,
                             cardholdername: cardHolderName,
                             expirationdate: expirationDate,
+                            cvv: cvv,
                           );
-                          context.read<AccCardCubit>().addCard(newCard);
+                          context.read<AddCardCubit>().addCard(newCard);
                         }
                       },
                       bgcolor: AppColours.primaryColor1,

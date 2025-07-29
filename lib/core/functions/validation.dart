@@ -47,49 +47,51 @@ String? otpValid(String? value) {
     return null;
   }
 }
-
+String? cvvValid(String? value){
+  if (value == null || value.isEmpty) {
+    return "This field is can't be empty";
+  } else if (value.contains(RegExp(r'[a-zA-Z]'))) {
+    return "CVV must contain only numbers";
+  } else if (value.length != 3) {
+    return "CVV must be 3 digits";
+  } else {
+    return null;
+  }
+}
 String? creditCardNumberValid(String? value) {
   if (value == null || value.isEmpty) {
     return "Credit card number can't be empty";
   }
-  // Cleaning the input by removing spaces and dashes
+
+  // 🧹 إزالة المسافات والـ dashes من الرقم
   String cleanedValue = value.replaceAll(RegExp(r'\s|-'), '');
 
-  // 1. checking if the card number contains only digits
-  if (!RegExp(r'^[0-9]+$').hasMatch(cleanedValue)) {
+  // 🔢 تأكيد أن الرقم يحتوي على أرقام فقط
+  if (!RegExp(r'^\d+$').hasMatch(cleanedValue)) {
     return "Credit card number must contain only digits";
   }
-  // 2. checking the card type and length
+
+  // 📏 التأكد من نوع الكارت وطوله
   final int length = cleanedValue.length;
   bool isValidLength = false;
   String? cardType;
-  // Visa
-  if (RegExp(r'^(4)').hasMatch(cleanedValue)) {
+
+  if (RegExp(r'^4').hasMatch(cleanedValue)) {
     if (length == 13 || length == 16) {
       isValidLength = true;
       cardType = 'Visa';
     }
-  }
-  // MasterCard
-  else if (RegExp(
-    r'^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[0-2])',
-  ).hasMatch(cleanedValue)) {
+  } else if (RegExp(r'^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[0-2])').hasMatch(cleanedValue)) {
     if (length == 16) {
       isValidLength = true;
       cardType = 'MasterCard';
     }
-  }
-  // American Express
-  else if (RegExp(r'^(34|37)').hasMatch(cleanedValue)) {
+  } else if (RegExp(r'^(34|37)').hasMatch(cleanedValue)) {
     if (length == 15) {
       isValidLength = true;
       cardType = 'American Express';
     }
-  }
-  // Discover
-  else if (RegExp(
-    r'^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)',
-  ).hasMatch(cleanedValue)) {
+  } else if (RegExp(r'^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)').hasMatch(cleanedValue)) {
     if (length == 16 || length == 19) {
       isValidLength = true;
       cardType = 'Discover';
@@ -97,10 +99,12 @@ String? creditCardNumberValid(String? value) {
   } else {
     return "Invalid credit card number or unrecognized type";
   }
+
   if (!isValidLength || cardType == null) {
     return "Invalid credit card number or unrecognized type";
   }
-  // 3. checksum validation using Luhn algorithm
+
+  // ✅ تحقق Luhn (خوارزمية التحقق من الرقم)
   int sum = 0;
   bool isSecondDigit = false;
 
@@ -113,11 +117,14 @@ String? creditCardNumberValid(String? value) {
         digit -= 9;
       }
     }
+
     sum += digit;
     isSecondDigit = !isSecondDigit;
   }
+
   if (sum % 10 != 0) {
     return "Invalid credit card number (Luhn check failed)";
   }
+
   return null;
 }

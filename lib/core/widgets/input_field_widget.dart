@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ibank/core/functions/validation.dart';
 import 'package:ibank/core/utils/appcolour.dart';
+import 'package:ibank/core/utils/input_formatters.dart';
 import 'package:ibank/core/utils/text_style.dart';
 
 class InputFieldWidget extends StatefulWidget {
@@ -30,6 +32,14 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLength: widget.hint == 'Enter CVV' ? 3 : null,
+      inputFormatters:
+          widget.hint == 'Enter Card Number'
+              ? [
+                LengthLimitingTextInputFormatter(19),
+                CardNumberInputFormatter(),
+              ]
+              : null,
       validator: (value) {
         if (widget.validator != null) {
           return widget.validator!(value);
@@ -38,6 +48,8 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
           return emailValid(value);
         } else if (widget.isPassword == true) {
           return passwordValid(value);
+        } else if (widget.hint == 'Enter CVV') {
+          return cvvValid(value);
         } else {
           return null;
         }
@@ -128,6 +140,7 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
       keyboardType: widget.keyboardType,
       obscureText: widget.isPassword == true ? showpassword : false,
       decoration: InputDecoration(
+        counterText: '',
         suffixIcon:
             widget.isPassword == true
                 ? IconButton(

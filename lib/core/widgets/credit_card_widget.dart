@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ibank/core/model/card_model.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
+import 'package:ibank/features/acc&cards/data/models/response/get_cards_response/datum.dart';
 import 'package:ibank/features/home/presentation/widgets/serial_number_widget.dart';
 
 class CreditCardWidget extends StatelessWidget {
   const CreditCardWidget({super.key, this.card});
-  final CardModel? card;
+  final Datum? card;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class CreditCardWidget extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: AssetImage('assets/images/${card?.type}.png'),
+            image: AssetImage('assets/images/${card?.brand}.png'),
           ),
         ),
         child: Column(
@@ -28,21 +28,21 @@ class CreditCardWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                card!.cardholdername,
+                card!.cardHolderName ?? '',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: getTitle2TextStyle(color: AppColours.naturalColor6),
               ),
             ),
             Text(
-              '${card!.type?.toUpperCase()}',
+              '${card!.brand?.toUpperCase()}',
               style: getBody1TextStyle(color: AppColours.naturalColor6),
             ),
             SizedBox(height: 20.h),
-            SerialNumberWidget(serialNumber: card!.cardnumber),
+            SerialNumberWidget(serialNumber: card!.cardNumber ?? ''),
             SizedBox(height: 10.h),
             Text(
-              card!.expirationdate,
+              card!.expiryDate ?? '',
               style: getTitle2TextStyle(color: AppColours.naturalColor6),
             ),
           ],
