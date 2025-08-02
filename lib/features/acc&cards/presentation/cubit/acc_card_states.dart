@@ -1,4 +1,3 @@
-import 'package:ibank/core/model/card_model.dart';
 import 'package:ibank/features/acc&cards/data/models/response/get_cards_response/datum.dart';
 
 class AccCardStates {}

@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ibank/core/extentions/extenstions.dart';
 import 'package:ibank/core/functions/validation.dart';
-import 'package:ibank/core/model/card_model.dart';
 import 'package:ibank/core/service/dialogs.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
 import 'package:ibank/core/widgets/input_field_widget.dart';
+import 'package:ibank/features/acc&cards/data/models/request/card_request.dart';
 import 'package:ibank/features/acc&cards/presentation/cubit/add_card_cubit.dart';
 import 'package:ibank/features/acc&cards/presentation/cubit/add_card_states.dart';
 import 'package:ibank/features/acc&cards/presentation/screens/accountcard_screen.dart';
@@ -148,10 +148,10 @@ class _AddCardScreenState extends State<AddCardScreen> {
                               widget.expirationDateController!.text.trim();
                           final cvv =
                               widget.cvvController!.text.substring(0, 3).trim();
-                          final CardModel newCard = CardModel(
-                            cardnumber: cardNumber,
-                            cardholdername: cardHolderName,
-                            expirationdate: expirationDate,
+                          final CardRequest newCard = CardRequest(
+                            cardNumber: cardNumber,
+                            cardHolderName: cardHolderName,
+                            expiryDate: expirationDate,
                             cvv: cvv,
                           );
                           context.read<AddCardCubit>().addCard(newCard);

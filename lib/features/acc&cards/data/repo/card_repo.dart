@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:ibank/core/model/card_model.dart';
 import 'package:ibank/core/service/dio_provider.dart';
 import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/features/acc&cards/data/models/request/card_request.dart';
@@ -9,18 +8,18 @@ import 'package:ibank/features/acc&cards/data/models/response/get_cards_response
 class CardRepo {
   final String token = AppLocalStorage.getToken() ?? '';
 
-  Future<CardResponse?> addCard({required CardModel card}) async {
+  Future<CardResponse?> addCard({required CardRequest card}) async {
     try {
       var response = await DioProvider.post(
         endpoint: 'cards/add_card',
         headers: {'Authorization': 'Bearer $token'},
         data:
             CardRequest(
-              brand: card.type,
-              cardNumber: card.cardnumber,
-              cardHolderName: card.cardholdername,
+              brand: card.brand,
+              cardNumber: card.cardNumber,
+              cardHolderName: card.cardHolderName,
               cvv: card.cvv,
-              expiryDate: card.expirationdate,
+              expiryDate: card.expiryDate,
             ).toJson(),
       );
       if (response.statusCode == 200) {
@@ -73,7 +72,7 @@ class CardRepo {
 
   Future<CardResponse?> updateCard({
     required String cardID,
-    required CardModel card,
+    required CardRequest card,
     required String cvv,
   }) async {
     try {
@@ -82,11 +81,11 @@ class CardRepo {
         headers: {'Authorization': 'Bearer $token'},
         data:
             CardRequest(
-              brand: card.type,
-              cardNumber: card.cardnumber,
-              cardHolderName: card.cardholdername,
+              brand: card.brand,
+              cardNumber: card.cardNumber,
+              cardHolderName: card.cardHolderName,
               cvv: cvv,
-              expiryDate: card.expirationdate,
+              expiryDate: card.expiryDate,
             ).toJson(),
       );
       if (response.statusCode == 200) {
