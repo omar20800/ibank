@@ -14,7 +14,6 @@ class DeleteCardSuccessState extends AccCardStates {
 class DeleteCardErrorState extends AccCardStates {
   final String error;
   DeleteCardErrorState({required this.error});
-  
 }
 
 class GetCardsSuccessState extends AccCardStates {

@@ -61,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      CreditCardWidget(),
+                      CreditCardWidget(card: user?.defaultCard),
                       Expanded(
                         child: Row(
                           spacing: 15.w,

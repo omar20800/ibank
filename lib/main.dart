@@ -6,7 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ibank/core/model/user_model.dart';
 import 'package:ibank/core/service/dio_provider.dart';
 import 'package:ibank/core/service/local_helper.dart';
-import 'package:ibank/features/main/presentation/screens/main_screen.dart';
+import 'package:ibank/features/acc&cards/data/models/response/get_cards_response/datum.dart';
 import 'package:ibank/features/auth/presentation/screens/welcome/welcome_screen.dart';
 import 'package:ibank/firebase_options.dart';
 
@@ -15,6 +15,7 @@ void main() async {
   await DioProvider.init();
   await Hive.initFlutter();
   Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(DatumAdapter());
   await AppLocalStorage.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   SystemChrome.setSystemUIOverlayStyle(

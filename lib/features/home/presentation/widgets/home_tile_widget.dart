@@ -11,7 +11,8 @@ class HomeTileWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.iconPath,
-    this.destination, this.onTap,
+    this.destination,
+    this.onTap,
   });
   final String title;
   final String iconPath;
@@ -27,9 +28,7 @@ class HomeTileWidget extends StatelessWidget {
             onTap!();
           } else if (destination != null) {
             context.pushTo(destination!);
-          } else {
-            
-          }
+          } else {}
         },
         child: Container(
           decoration: BoxDecoration(

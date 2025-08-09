@@ -22,6 +22,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       email: fields[2] as String?,
       imageUrl: fields[3] as String?,
       phoneNumber: fields[4] as String?,
+      defaultCard: fields[7] as Datum?,
       age: fields[5] as int?,
       balance: fields[6] as double?,
     );
@@ -30,7 +31,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.uid)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(5)
       ..write(obj.age)
       ..writeByte(6)
-      ..write(obj.balance);
+      ..write(obj.balance)
+      ..writeByte(7)
+      ..write(obj.defaultCard);
   }
 
   @override

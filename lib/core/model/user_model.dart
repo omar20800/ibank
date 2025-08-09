@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:ibank/features/acc&cards/data/models/response/get_cards_response/datum.dart';
 
 part 'user_model.g.dart';
 
@@ -18,6 +19,8 @@ class UserModel {
   int? age;
   @HiveField(6)
   double? balance;
+  @HiveField(7)
+  Datum? defaultCard;
   DateTime? lastLogin;
   DateTime? createdAt;
 
@@ -27,6 +30,7 @@ class UserModel {
     this.email,
     this.imageUrl,
     this.phoneNumber,
+    this.defaultCard,
     this.age,
     this.balance,
     this.lastLogin,
@@ -37,6 +41,9 @@ class UserModel {
     name = json['name'];
     email = json['email'];
     imageUrl = json['imageUrl'];
+    defaultCard = json['defaultCard'] != null
+        ? Datum.fromJson(json['defaultCard'])
+        : null;
     phoneNumber = json['phoneNumber'];
     age = json['age'];
     balance = json['balance'];
@@ -48,6 +55,7 @@ class UserModel {
     data['email'] = email;
     data['imageUrl'] = imageUrl;
     data['phoneNumber'] = phoneNumber;
+    data['defaultCard'] = defaultCard?.toJson();
     data['age'] = age;
     data['balance'] = balance;
     data['lastLogin'] = lastLogin;
@@ -60,6 +68,7 @@ class UserModel {
     String? name,
     String? email,
     String? imageUrl,
+    Datum? defaultCard,
     String? phoneNumber,
     int? age,
     double? balance,
@@ -70,6 +79,7 @@ class UserModel {
     name: name ?? this.name,
     email: email ?? this.email,
     imageUrl: imageUrl ?? this.imageUrl,
+    defaultCard: defaultCard ?? this.defaultCard,
     phoneNumber: phoneNumber ?? this.phoneNumber,
     age: age ?? this.age,
     balance: balance ?? this.balance,

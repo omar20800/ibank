@@ -99,4 +99,22 @@ class CardRepo {
       throw 'Unexpected error';
     }
   }
+  Future<CardResponse?> setDefaultCard({required String cardID}) async {
+    try {
+      var response = await DioProvider.post(
+        endpoint: 'cards/change_default_card',
+        headers: {'Authorization': 'Bearer $token'},
+        data: {'card_id': cardID},
+      );
+      if (response.statusCode == 200) {
+        return CardResponse.fromJson(response.data);
+      } else {
+        return null;
+      }
+    } on DioException catch (e) {
+      throw e.response?.data['message'] ?? 'Something went wrong';
+    } catch (e) {
+      throw 'Unexpected error';
+    }
+  }
 }

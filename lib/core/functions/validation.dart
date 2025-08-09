@@ -47,7 +47,8 @@ String? otpValid(String? value) {
     return null;
   }
 }
-String? cvvValid(String? value){
+
+String? cvvValid(String? value) {
   if (value == null || value.isEmpty) {
     return "This field is can't be empty";
   } else if (value.contains(RegExp(r'[a-zA-Z]'))) {
@@ -58,6 +59,7 @@ String? cvvValid(String? value){
     return null;
   }
 }
+
 String? creditCardNumberValid(String? value) {
   if (value == null || value.isEmpty) {
     return "Credit card number can't be empty";
@@ -81,7 +83,9 @@ String? creditCardNumberValid(String? value) {
       isValidLength = true;
       cardType = 'Visa';
     }
-  } else if (RegExp(r'^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[0-2])').hasMatch(cleanedValue)) {
+  } else if (RegExp(
+    r'^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[0-2])',
+  ).hasMatch(cleanedValue)) {
     if (length == 16) {
       isValidLength = true;
       cardType = 'MasterCard';
@@ -91,7 +95,9 @@ String? creditCardNumberValid(String? value) {
       isValidLength = true;
       cardType = 'American Express';
     }
-  } else if (RegExp(r'^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)').hasMatch(cleanedValue)) {
+  } else if (RegExp(
+    r'^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)',
+  ).hasMatch(cleanedValue)) {
     if (length == 16 || length == 19) {
       isValidLength = true;
       cardType = 'Discover';

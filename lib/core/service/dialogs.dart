@@ -20,7 +20,7 @@ class Dialogs {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.pop(context, true),
                 child: Text(
                   'OK',
                   style: getCaption2TextStyle(color: AppColours.primaryColor1),
@@ -28,6 +28,19 @@ class Dialogs {
               ),
             ],
           ),
+    );
+  }
+
+  static void showErrorSnackbar (BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: getCaption2TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppColours.semanticColor1,
+        duration: const Duration(seconds: 3),
+      ),
     );
   }
 

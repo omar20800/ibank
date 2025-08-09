@@ -47,10 +47,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
               if (state is AddCardLoadingState) {
                 Dialogs.showLoadingDialog(context);
               } else if (state is AddCardSuccessState) {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).pop();
+                Navigator.of(context, rootNavigator: true).pop();
                 context.pushAndRemoveUntil(MainScreen());
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -59,10 +56,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   ),
                 );
               } else if (state is AddCardErrorState) {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).pop();
+                Navigator.of(context, rootNavigator: true).pop();
                 Dialogs.showErrorDialog(context, state.error);
               }
             },

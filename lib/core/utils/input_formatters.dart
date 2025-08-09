@@ -6,7 +6,10 @@ class CardNumberInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    final newText = newValue.text.replaceAll(RegExp(r'\D'), ''); // remove non-digits
+    final newText = newValue.text.replaceAll(
+      RegExp(r'\D'),
+      '',
+    ); // remove non-digits
     final buffer = StringBuffer();
 
     for (int i = 0; i < newText.length; i++) {

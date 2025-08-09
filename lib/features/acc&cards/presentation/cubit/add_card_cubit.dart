@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ibank/features/acc&cards/data/models/request/card_request.dart';
 import 'package:ibank/features/acc&cards/data/repo/card_repo.dart';
@@ -9,6 +10,7 @@ class AddCardCubit extends Cubit<AddCardStates> {
   Future<void> addCard(CardRequest card) async {
     emit(AddCardLoadingState());
     try {
+      log("Adding card: ${card.toJson()}");
       final value = await CardRepo().addCard(card: card);
       if (value?.data != null) {
         emit(AddCardSuccessState(message: value!.message!));

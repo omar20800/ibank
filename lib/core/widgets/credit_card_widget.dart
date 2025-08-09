@@ -19,7 +19,7 @@ class CreditCardWidget extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: AssetImage('assets/images/${card?.brand}.png'),
+            image: AssetImage(detectBrand(card!.cardNumber ?? '')),
           ),
         ),
         child: Column(
@@ -73,5 +73,12 @@ class CreditCardWidget extends StatelessWidget {
         ),
       );
     }
+  }
+
+  String detectBrand(String cardNumber) {
+    if (cardNumber.startsWith('4')) return 'assets/images/visa.png';
+    if (cardNumber.startsWith('5')) return 'assets/images/mastercard.png';
+    if (cardNumber.startsWith('3')) return 'assets/images/amex.png';
+    return 'assets/images/empty.png';
   }
 }

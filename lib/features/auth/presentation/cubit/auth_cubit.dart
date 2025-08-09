@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ibank/core/model/user_model.dart';
 import 'package:ibank/core/service/local_helper.dart';
@@ -16,12 +17,14 @@ class AuthCubit extends Cubit<AuthStates> {
       );
       if (value?.data != null) {
         emit(AuthSuccess());
+        log("User data: ${value?.data?.toJson()}");
         AppLocalStorage.cacheToken(value!.data!.token!);
         AppLocalStorage.cacheUser(
           UserModel(
             age: value.data?.age,
             balance: value.data?.balance,
             createdAt: value.data?.createdAt,
+            defaultCard: value.data?.defaultCard,
             email: value.data?.email,
             imageUrl: value.data?.imageUrl,
             lastLogin: value.data?.lastLogin,
@@ -53,12 +56,14 @@ class AuthCubit extends Cubit<AuthStates> {
       );
       if (value?.data != null) {
         emit(AuthSuccess());
+        log("User data: ${value?.data?.toJson()}");
         AppLocalStorage.cacheToken(value!.data!.token!);
         AppLocalStorage.cacheUser(
           UserModel(
             age: value.data?.age,
             balance: value.data?.balance,
             createdAt: value.data?.createdAt,
+            defaultCard: value.data?.defaultCard,
             email: value.data?.email,
             imageUrl: value.data?.imageUrl,
             lastLogin: value.data?.lastLogin,
@@ -75,13 +80,48 @@ class AuthCubit extends Cubit<AuthStates> {
     }
   }
 
+  Future<void> getUser() async {
+    emit(AuthLoading());
+    try {
+      final token = AppLocalStorage.getToken();
+      if (token == null) {
+        emit(AuthError(errorMessage: 'No token found'));
+        return;
+      }
+      final value = await AuthRepo().getUser(token);
+      if (value?.status == true) {
+        emit(AuthSuccess());
+        log("User data: ${value?.data?.toJson()}");
+        AppLocalStorage.cacheUser(
+          UserModel(
+            age: value?.data?.age,
+            balance: value?.data?.balance,
+            createdAt: value?.data?.createdAt,
+            email: value?.data?.email,
+            imageUrl: value?.data?.imageUrl,
+            defaultCard: value?.data?.defaultCard,
+            lastLogin: value?.data?.lastLogin,
+            name: value?.data?.name,
+            phoneNumber: value?.data?.phoneNumber,
+            uid: value?.data?.id,
+          ),
+        );
+      } else {
+        emit(AuthError(errorMessage: 'Unknown error'));
+      }
+    } catch (e) {
+      emit(AuthError(errorMessage: e.toString()));
+    }
+  }
+
   Future<void> logout() async {
     emit(AuthLoading());
     try {
       if (AppLocalStorage.getToken() == null) return;
       final value = await AuthRepo().logout(AppLocalStorage.getToken()!);
-      if (value != null) {
+      if (value?.status == true) {
         emit(AuthSuccess());
+        log("Logout successful");
         AppLocalStorage.removeToken();
       } else {
         emit(AuthError(errorMessage: 'Unknown error'));

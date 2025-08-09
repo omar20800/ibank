@@ -19,8 +19,8 @@ class Data {
     this.email,
     this.phoneNumber,
     this.imageUrl,
-    this.defaultCard,
     this.age,
+    this.defaultCard,
     this.balance,
     this.lastLogin,
     this.createdAt,
@@ -34,9 +34,7 @@ class Data {
     phoneNumber: json['phoneNumber'] as String?,
     imageUrl: json['imageUrl'] as String?,
     age: json['age'] as int?,
-    defaultCard: json['default_card'] != null
-        ? Datum.fromJson(json['default_card'] as Map<String, dynamic>)
-        : null,
+    defaultCard: json['default_card'] == null ? null : Datum.fromJson(json['default_card']),
     balance: json['balance'] as double?,
     lastLogin:
         json['lastLogin'] == null
