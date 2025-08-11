@@ -21,7 +21,7 @@ class AccCardCubit extends Cubit<AccCardStates> {
     }
   }
 
-  deleteCard(String cardID) async {
+  Future<void> deleteCard(String cardID) async {
     emit(AccCardLoadingState());
     try {
       final value = await CardRepo().deleteCard(cardID: cardID);
@@ -33,6 +33,21 @@ class AccCardCubit extends Cubit<AccCardStates> {
       }
     } catch (e) {
       emit(DeleteCardErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> setDefaultCard(String cardID) async {
+    emit(AccCardLoadingState());
+    try {
+      final value = await CardRepo().setDefaultCard(cardID: cardID);
+      if (value?.status == true) {
+        emit(SetDefaultCardSuccessState(message: value!.message!));
+        log('Card set as default successfully');
+      } else {
+        emit(SetDefaultCardErrorState(error: "Cannot set card as default"));
+      }
+    } catch (e) {
+      emit(SetDefaultCardErrorState(error: e.toString()));
     }
   }
 }

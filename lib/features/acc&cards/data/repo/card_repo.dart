@@ -101,10 +101,9 @@ class CardRepo {
   }
   Future<CardResponse?> setDefaultCard({required String cardID}) async {
     try {
-      var response = await DioProvider.post(
-        endpoint: 'cards/change_default_card',
+      var response = await DioProvider.update(
+        endpoint: 'cards/change_default_card/$cardID',
         headers: {'Authorization': 'Bearer $token'},
-        data: {'card_id': cardID},
       );
       if (response.statusCode == 200) {
         return CardResponse.fromJson(response.data);

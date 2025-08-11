@@ -12,6 +12,7 @@ import 'package:ibank/features/acc&cards/presentation/cubit/acc_card_cubit.dart'
 import 'package:ibank/features/acc&cards/presentation/cubit/acc_card_states.dart';
 import 'package:ibank/features/acc&cards/presentation/screens/add_card_screen.dart';
 import 'package:ibank/features/home/presentation/widgets/accounts_tab.dart';
+import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 
 class AccountcardScreen extends StatefulWidget {
   const AccountcardScreen({super.key});
@@ -29,7 +30,7 @@ class _AccountcardScreenState extends State<AccountcardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<AccCardCubit>(
       create: (context) => AccCardCubit(),
       child: Scaffold(
         appBar: AppBar(
@@ -47,13 +48,15 @@ class _AccountcardScreenState extends State<AccountcardScreen> {
               context.pop();
             } else if (state is DeleteCardSuccessState) {
               context.pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: AppColours.semanticColor4,
-                  content: Text(state.message),
-                ),
-              );
+              Dialogs.showSuccessSnackbar(context, state.message);
             } else if (state is DeleteCardErrorState) {
+              context.pop();
+              Dialogs.showErrorDialog(context, state.error);
+            } else if (state is SetDefaultCardSuccessState) {
+              context.pop();
+              Dialogs.showSuccessSnackbar(context, state.message);
+              context.pushAndRemoveUntil(MainScreen());
+            } else if (state is SetDefaultCardErrorState) {
               context.pop();
               Dialogs.showErrorDialog(context, state.error);
             }
@@ -180,7 +183,24 @@ class _AccountcardScreenState extends State<AccountcardScreen> {
                                           context.read<AccCardCubit>();
                                       await cubit.deleteCard(cardId);
                                     },
-                                    child: CreditCardWidget(card: cards[index]),
+                                    child: GestureDetector(
+                                      onLongPress: () {
+                                        Dialogs.showInfoDialog(
+                                          context,
+                                          'Are you sure you want to set this card as default ?',
+                                          () {
+                                            context
+                                                .read<AccCardCubit>()
+                                                .setDefaultCard(
+                                                  cards[index].id!,
+                                                );
+                                          },
+                                        );
+                                      },
+                                      child: CreditCardWidget(
+                                        card: cards[index],
+                                      ),
+                                    ),
                                   );
                                 },
                                 separatorBuilder:

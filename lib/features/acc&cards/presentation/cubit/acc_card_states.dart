@@ -25,3 +25,14 @@ class GetCardsErrorState extends AccCardStates {
   final String error;
   GetCardsErrorState({required this.error});
 }
+
+class SetDefaultCardSuccessState extends AccCardStates {
+  final String message;
+  SetDefaultCardSuccessState({required this.message});
+}
+
+class SetDefaultCardErrorState extends AccCardStates {
+  final String error;
+  SetDefaultCardErrorState({required this.error});
+}
+

@@ -31,6 +31,39 @@ class Dialogs {
     );
   }
 
+  static void showInfoDialog(BuildContext context, String message,Function? onOkPressed) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: AppColours.naturalColor6,
+            title: Text(
+              'Info',
+              style: getTitle2TextStyle(color: AppColours.primaryColor1),
+            ),
+            content: Text(
+              message,
+              style: getCaption2TextStyle(color: AppColours.textColor),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                  if (onOkPressed != null) {
+                    onOkPressed();
+                  }
+                },
+                child: Text(
+                  'OK',
+                  style: getCaption2TextStyle(color: AppColours.primaryColor1),
+                ),
+              ),
+            ],
+          ),
+    );
+  }
+
   static void showErrorSnackbar (BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -39,6 +72,19 @@ class Dialogs {
           style: getCaption2TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColours.semanticColor1,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
+  static void showSuccessSnackbar (BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: getCaption2TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppColours.semanticColor4,
         duration: const Duration(seconds: 3),
       ),
     );

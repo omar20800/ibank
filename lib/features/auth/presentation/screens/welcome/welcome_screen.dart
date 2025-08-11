@@ -104,7 +104,7 @@ class WelcomeScreen extends StatelessWidget {
                                       'Authenticate to login',
                                     );
                                 if (authenticated) {
-                                  context.read<AuthCubit>().getUser();
+                                  context.read<AuthCubit>().isTokenValid();
                                 } else {
                                   context.pushTo(LoginScreen());
                                 }

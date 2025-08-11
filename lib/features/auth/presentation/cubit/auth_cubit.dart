@@ -8,6 +8,27 @@ import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 class AuthCubit extends Cubit<AuthStates> {
   AuthCubit() : super(AuthInitial());
 
+  Future<void> isTokenValid() async {
+    emit(AuthLoading());
+    try {
+      final token = AppLocalStorage.getToken();
+      if (token == null) {
+        emit(AuthError(errorMessage: 'No token found'));
+        return;
+      }
+      final value = await AuthRepo().isTokenValid(token);
+      if (value?.status == true) {
+        emit(AuthSuccess());
+        log("Token is valid Login successful");
+      } else {
+        AppLocalStorage.removeToken();
+        emit(AuthError(errorMessage: 'Token is invalid'));
+      }
+    } catch (e) {
+      emit(AuthError(errorMessage: e.toString()));
+    }
+  }
+
   Future<void> login(String emailAddress, String password) async {
     emit(AuthLoading());
     try {
@@ -81,36 +102,35 @@ class AuthCubit extends Cubit<AuthStates> {
   }
 
   Future<void> getUser() async {
-    emit(AuthLoading());
+    emit(GetUserDataLoading());
     try {
       final token = AppLocalStorage.getToken();
       if (token == null) {
-        emit(AuthError(errorMessage: 'No token found'));
+        emit(GetUserDataError(errorMessage: 'No token found'));
         return;
       }
       final value = await AuthRepo().getUser(token);
       if (value?.status == true) {
-        emit(AuthSuccess());
-        log("User data: ${value?.data?.toJson()}");
-        AppLocalStorage.cacheUser(
-          UserModel(
-            age: value?.data?.age,
-            balance: value?.data?.balance,
-            createdAt: value?.data?.createdAt,
-            email: value?.data?.email,
-            imageUrl: value?.data?.imageUrl,
-            defaultCard: value?.data?.defaultCard,
-            lastLogin: value?.data?.lastLogin,
-            name: value?.data?.name,
-            phoneNumber: value?.data?.phoneNumber,
-            uid: value?.data?.id,
-          ),
+        UserModel? user = UserModel(
+          age: value?.data?.age,
+          balance: value?.data?.balance,
+          createdAt: value?.data?.createdAt,
+          email: value?.data?.email,
+          imageUrl: value?.data?.imageUrl,
+          defaultCard: value?.data?.defaultCard,
+          lastLogin: value?.data?.lastLogin,
+          name: value?.data?.name,
+          phoneNumber: value?.data?.phoneNumber,
+          uid: value?.data?.id,
         );
+        emit(GetUserDataSuccess(user: user));
+        log("User data: ${value?.data?.toJson()}");
+        AppLocalStorage.cacheUser(user);
       } else {
-        emit(AuthError(errorMessage: 'Unknown error'));
+        emit(GetUserDataError(errorMessage: 'Unknown error'));
       }
     } catch (e) {
-      emit(AuthError(errorMessage: e.toString()));
+      emit(GetUserDataError(errorMessage: e.toString()));
     }
   }
 

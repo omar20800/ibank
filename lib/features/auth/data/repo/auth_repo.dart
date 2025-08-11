@@ -6,6 +6,23 @@ import 'package:ibank/features/auth/data/model/response/auth_response/auth_respo
 import 'package:ibank/features/auth/data/model/response/get_profile_response/get_profile_response.dart';
 
 class AuthRepo {
+  Future<AuthResponse?> isTokenValid(String token) async {
+    try {
+      var response = await DioProvider.get(
+        endpoint: 'auth/is_token_valid',
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      if (response.statusCode == 200) {
+        return AuthResponse.fromJson(response.data);
+      } else {
+        return null;
+      }
+    } on DioException catch (e) {
+      throw e.response?.data['message'] ?? 'Something went wrong';
+    } catch (e) {
+      throw 'Unexpected error';
+    }
+  } 
   Future<AuthResponse?> login({
     required String emailAddress,
     required String password,

@@ -11,7 +11,6 @@ import 'package:ibank/core/widgets/input_field_widget.dart';
 import 'package:ibank/features/acc&cards/data/models/request/card_request.dart';
 import 'package:ibank/features/acc&cards/presentation/cubit/add_card_cubit.dart';
 import 'package:ibank/features/acc&cards/presentation/cubit/add_card_states.dart';
-import 'package:ibank/features/acc&cards/presentation/screens/accountcard_screen.dart';
 import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 
 class AddCardScreen extends StatefulWidget {
