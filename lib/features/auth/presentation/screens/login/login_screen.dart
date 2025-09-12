@@ -9,7 +9,9 @@ import 'package:ibank/core/widgets/input_field_widget.dart';
 import 'package:ibank/features/auth/presentation/auth_constants.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
+import 'package:ibank/features/auth/presentation/screens/forgot%20password/forgot_password_screen.dart';
 import 'package:ibank/features/auth/presentation/screens/register/register_screen.dart';
+import 'package:ibank/features/auth/presentation/screens/vertify%20email/vertify_email_screen.dart';
 import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -50,6 +52,9 @@ class LoginScreen extends StatelessWidget {
                 context.pushAndRemoveUntil(MainScreen());
               } else if (state is AuthLoading) {
                 Dialogs.showLoadingDialog(context);
+              } else if (state is AuthOtpVerifiedError) {
+                context.pop();
+                context.pushTo(VertifyEmailScreen(email: state.email));
               }
             },
             builder: (context, state) {
@@ -102,7 +107,9 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.pushTo(ForgotPasswordScreen());
+                            },
                             child: Text(
                               AuthConstants.forgotpassword,
                               style: getCaption2TextStyle(

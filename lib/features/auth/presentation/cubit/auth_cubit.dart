@@ -36,8 +36,67 @@ class AuthCubit extends Cubit<AuthStates> {
         emailAddress: emailAddress,
         password: password,
       );
+      if (value?.status == true) {
+        if (value?.message == "Please verify your email before logging in") {
+          emit(AuthOtpVerifiedError(email: emailAddress));
+          log("Please verify your email before logging in");
+          AppLocalStorage.cacheToken(value!.data!.token!);
+          AppLocalStorage.cacheUser(
+            UserModel(
+              age: value.data?.age,
+              balance: value.data?.balance,
+              createdAt: value.data?.createdAt,
+              defaultCard: value.data?.defaultCard,
+              email: value.data?.email,
+              imageUrl: value.data?.imageUrl,
+              lastLogin: value.data?.lastLogin,
+              name: value.data?.name,
+              phoneNumber: value.data?.phoneNumber,
+              uid: value.data?.id,
+            ),
+          );
+        } else {
+          emit(AuthSuccess());
+          log("User data: ${value?.data?.toJson()}");
+          AppLocalStorage.cacheToken(value!.data!.token!);
+          AppLocalStorage.cacheUser(
+            UserModel(
+              age: value.data?.age,
+              balance: value.data?.balance,
+              createdAt: value.data?.createdAt,
+              defaultCard: value.data?.defaultCard,
+              email: value.data?.email,
+              imageUrl: value.data?.imageUrl,
+              lastLogin: value.data?.lastLogin,
+              name: value.data?.name,
+              phoneNumber: value.data?.phoneNumber,
+              uid: value.data?.id,
+            ),
+          );
+        }
+      } else {
+        emit(AuthError(errorMessage: 'Unknown error'));
+      }
+    } catch (e) {
+      emit(AuthError(errorMessage: e.toString()));
+    }
+  }
+
+  Future<void> register(
+    String name,
+    String emailAddress,
+    String password,
+  ) async {
+    emit(AuthLoading());
+    try {
+      final value = await AuthRepo().register(
+        name: name,
+        emailAddress: emailAddress,
+        password: password,
+        passwordConfirm: password,
+      );
       if (value?.data != null) {
-        emit(AuthSuccess());
+        emit(AuthSuccess(email: emailAddress));
         log("User data: ${value?.data?.toJson()}");
         AppLocalStorage.cacheToken(value!.data!.token!);
         AppLocalStorage.cacheUser(
@@ -62,22 +121,13 @@ class AuthCubit extends Cubit<AuthStates> {
     }
   }
 
-  Future<void> register(
-    String name,
-    String emailAddress,
-    String password,
-  ) async {
+  Future<void> verifyEmail(String email, String otp) async {
     emit(AuthLoading());
     try {
-      final value = await AuthRepo().register(
-        name: name,
-        emailAddress: emailAddress,
-        password: password,
-        passwordConfirm: password,
-      );
-      if (value?.data != null) {
-        emit(AuthSuccess());
-        log("User data: ${value?.data?.toJson()}");
+      final value = await AuthRepo().verifyEmail(email: email, otp: otp);
+      if (value?.status == true) {
+        emit(AuthOtpVerified());
+        log("Email verified successfully");
         AppLocalStorage.cacheToken(value!.data!.token!);
         AppLocalStorage.cacheUser(
           UserModel(

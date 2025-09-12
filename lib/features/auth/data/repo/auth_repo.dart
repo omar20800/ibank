@@ -14,15 +14,13 @@ class AuthRepo {
       );
       if (response.statusCode == 200) {
         return AuthResponse.fromJson(response.data);
-      } else {
-        return null;
       }
+      return null;
     } on DioException catch (e) {
       throw e.response?.data['message'] ?? 'Something went wrong';
-    } catch (e) {
-      throw 'Unexpected error';
     }
-  } 
+  }
+
   Future<AuthResponse?> login({
     required String emailAddress,
     required String password,
@@ -30,18 +28,17 @@ class AuthRepo {
     try {
       var response = await DioProvider.post(
         endpoint: 'auth/login',
-        data:
-            AuthLoginRequest(email: emailAddress, password: password).toJson(),
+        data: AuthLoginRequest(
+          email: emailAddress,
+          password: password,
+        ).toJson(),
       );
       if (response.statusCode == 201) {
         return AuthResponse.fromJson(response.data);
-      } else {
-        return null;
       }
+      return null;
     } on DioException catch (e) {
       throw e.response?.data['message'] ?? 'Something went wrong';
-    } catch (e) {
-      throw 'Unexpected error';
     }
   }
 
@@ -54,23 +51,19 @@ class AuthRepo {
     try {
       var response = await DioProvider.post(
         endpoint: 'auth/register',
-        data:
-            AuthRequest(
-              name: name,
-              email: emailAddress,
-              password: password,
-              passwordConfirm: passwordConfirm,
-            ).toJson(),
+        data: AuthRequest(
+          name: name,
+          email: emailAddress,
+          password: password,
+          passwordConfirm: passwordConfirm,
+        ).toJson(),
       );
       if (response.statusCode == 201) {
         return AuthResponse.fromJson(response.data);
-      } else {
-        return null;
       }
+      return null;
     } on DioException catch (e) {
       throw e.response?.data['message'] ?? 'Something went wrong';
-    } catch (e) {
-      throw 'Unexpected error';
     }
   }
 
@@ -82,13 +75,10 @@ class AuthRepo {
       );
       if (response.statusCode == 200) {
         return GetProfileResponse.fromJson(response.data);
-      } else {
-        return null;
       }
+      return null;
     } on DioException catch (e) {
       throw e.response?.data['message'] ?? 'Something went wrong';
-    } catch (e) {
-      throw 'Unexpected error';
     }
   }
 
@@ -100,13 +90,66 @@ class AuthRepo {
       );
       if (response.statusCode == 201) {
         return AuthResponse.fromJson(response.data);
-      } else {
-        return null;
       }
+      return null;
     } on DioException catch (e) {
       throw e.response?.data['message'] ?? 'Something went wrong';
-    } catch (e) {
-      throw 'Unexpected error';
+    }
+  }
+
+  Future<AuthResponse?> verifyEmail({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      var response = await DioProvider.post(
+        endpoint: 'auth/verify-email',
+        data: {"email": email, "otp": otp},
+      );
+      if (response.statusCode == 201) {
+        return AuthResponse.fromJson(response.data);
+      }
+      return null;
+    } on DioException catch (e) {
+      throw e.response?.data['message'] ?? 'Something went wrong';
+    }
+  }
+
+  Future<AuthResponse?> requestPasswordReset(String email) async {
+    try {
+      var response = await DioProvider.post(
+        endpoint: 'auth/request-password-reset',
+        data: {"email": email},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return AuthResponse.fromJson(response.data);
+      }
+      return null;
+    } on DioException catch (e) {
+      throw e.response?.data['message'] ?? 'Something went wrong';
+    }
+  }
+
+  Future<AuthResponse?> confirmPasswordReset({
+    required String email,
+    required String otp,
+    required String newPassword,
+  }) async {
+    try {
+      var response = await DioProvider.post(
+        endpoint: 'auth/confirm-password-reset',
+        data: {
+          "email": email,
+          "otp": otp,
+          "newPassword": newPassword,
+        },
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return AuthResponse.fromJson(response.data);
+      }
+      return null;
+    } on DioException catch (e) {
+      throw e.response?.data['message'] ?? 'Something went wrong';
     }
   }
 }

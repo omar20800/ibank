@@ -10,6 +10,7 @@ import 'package:ibank/features/auth/presentation/auth_constants.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 import 'package:ibank/features/auth/presentation/screens/login/login_screen.dart';
+import 'package:ibank/features/auth/presentation/screens/vertify%20email/vertify_email_screen.dart';
 import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -58,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Dialogs.showErrorDialog(context, state.errorMessage);
               } else if (state is AuthSuccess) {
                 context.pop();
-                context.pushAndRemoveUntil(MainScreen());
+                context.pushTo(VertifyEmailScreen(email: state.email,));
               } else if (state is AuthLoading) {
                 Dialogs.showLoadingDialog(context);
               }

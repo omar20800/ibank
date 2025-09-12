@@ -11,12 +11,23 @@ class AuthError extends AuthStates {
   AuthError({required this.errorMessage});
 }
 
-class AuthSuccess extends AuthStates {}
+class AuthSuccess extends AuthStates {
+  final String email;
+  AuthSuccess({this.email = ""});
+}
+
+class AuthOtpVerified extends AuthStates {}
+
+class AuthOtpVerifiedError extends AuthStates {
+  final String email;
+  AuthOtpVerifiedError({required this.email});
+}
 
 class GetUserDataSuccess extends AuthStates {
   final UserModel user;
   GetUserDataSuccess({required this.user});
 }
+
 class GetUserDataError extends AuthStates {
   final String errorMessage;
   GetUserDataError({required this.errorMessage});
