@@ -12,6 +12,7 @@ class AuthConstants {
   static const String namehint = 'Full Name';
   static const String emailhint = 'Email';
   static const String passwordhint = 'Password';
+  static const String confirmpasswordhint = 'Confirm Password';
   static const String agreeterms = 'I agree to the';
   static const String termsandconditions = 'Terms & Conditions';
   static const String alreadyhaveaccount = 'Already have an account?';

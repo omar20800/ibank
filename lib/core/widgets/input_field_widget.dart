@@ -4,6 +4,7 @@ import 'package:ibank/core/functions/validation.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/input_formatters.dart';
 import 'package:ibank/core/utils/text_style.dart';
+import 'package:ibank/features/auth/presentation/auth_constants.dart';
 
 class InputFieldWidget extends StatefulWidget {
   const InputFieldWidget({
@@ -14,6 +15,7 @@ class InputFieldWidget extends StatefulWidget {
     this.isPassword,
     this.dateyearpicker = false,
     this.validator,
+    this.customValidator,
   });
   final String hint;
   final TextInputType? keyboardType;
@@ -21,6 +23,7 @@ class InputFieldWidget extends StatefulWidget {
   final String? Function(String?)? validator;
   final bool? isPassword;
   final bool dateyearpicker;
+  final Function()? customValidator;
 
   @override
   State<InputFieldWidget> createState() => _InputFieldWidgetState();
@@ -42,14 +45,20 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
               : null,
       validator: (value) {
         if (widget.validator != null) {
-          return widget.validator!(value);
-        }
-        if (widget.keyboardType == TextInputType.emailAddress) {
-          return emailValid(value);
-        } else if (widget.isPassword == true) {
-          return passwordValid(value);
-        } else if (widget.hint == 'Enter CVV') {
-          return cvvValid(value);
+          if (widget.validator != null) {
+            return widget.validator!(value);
+          }
+          if (widget.keyboardType == TextInputType.emailAddress) {
+            return emailValid(value);
+          } else if (widget.hint == AuthConstants.passwordhint) {
+            return passwordValid(value);
+          } else if (widget.hint == 'Enter CVV') {
+            return cvvValid(value);
+          } else {
+            return null;
+          }
+        } else if (widget.customValidator != null) {
+          return widget.customValidator!();
         } else {
           return null;
         }

@@ -29,6 +29,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final TextEditingController? passwordController = TextEditingController();
 
+  final TextEditingController? confirmPasswordController =
+      TextEditingController();
+
   bool agreed = false;
 
   @override
@@ -59,7 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Dialogs.showErrorDialog(context, state.errorMessage);
               } else if (state is AuthSuccess) {
                 context.pop();
-                context.pushTo(VertifyEmailScreen(email: state.email,));
+                context.pushTo(VertifyEmailScreen(email: state.email));
               } else if (state is AuthLoading) {
                 Dialogs.showLoadingDialog(context);
               }
@@ -121,6 +124,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               isPassword: true,
                             ),
                             const SizedBox(height: 20),
+                            InputFieldWidget(
+                              hint: AuthConstants.confirmpasswordhint,
+                              keyboardType: TextInputType.number,
+                              controller: confirmPasswordController,
+                              isPassword: true,
+                              customValidator: () {
+                                if (confirmPasswordController!.text.isEmpty) {
+                                  return "This field can't be empty";
+                                } else if (confirmPasswordController!.text !=
+                                    passwordController!.text) {
+                                  return "Passwords do not match";
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 20),
                             Row(
                               children: [
                                 Checkbox(
@@ -156,6 +175,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     nameController!.text.trim(),
                                     emailController!.text.trim(),
                                     passwordController!.text.trim(),
+                                    confirmPasswordController!.text.trim(),
                                   );
                                 }
                               },

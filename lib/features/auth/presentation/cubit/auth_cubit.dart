@@ -86,6 +86,7 @@ class AuthCubit extends Cubit<AuthStates> {
     String name,
     String emailAddress,
     String password,
+    String passwordConfirm,
   ) async {
     emit(AuthLoading());
     try {
@@ -93,7 +94,7 @@ class AuthCubit extends Cubit<AuthStates> {
         name: name,
         emailAddress: emailAddress,
         password: password,
-        passwordConfirm: password,
+        passwordConfirm: passwordConfirm,
       );
       if (value?.data != null) {
         emit(AuthSuccess(email: emailAddress));
