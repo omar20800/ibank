@@ -75,25 +75,18 @@ class WelcomeScreen extends StatelessWidget {
                           final token = AppLocalStorage.getToken();
                           final user = AppLocalStorage.getUser();
                           if (token != null) {
-                            final result = await showDialog(
-                              context: context,
-                              builder:
-                                  (context) => AlertDialog(
-                                    title: Text('Biometric Login'),
-                                    content: Text('Are you ${user?.name}'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed:
-                                            () => Navigator.pop(context, false),
-                                        child: Text('No'),
-                                      ),
-                                      TextButton(
-                                        onPressed:
-                                            () => Navigator.pop(context, true),
-                                        child: Text('Yes'),
-                                      ),
-                                    ],
-                                  ),
+                            final result = Dialogs.showAlertDialog(
+                              context,
+                              'Biometric Login',
+                              'Are you ${user?.name} ?',
+                              () {
+                                Navigator.pop(context, true);
+                              },
+                              () {
+                                Navigator.pop(context, false);
+                              },
+                              'Yes',
+                              'No',
                             );
                             if (result == true) {
                               final isSupported =

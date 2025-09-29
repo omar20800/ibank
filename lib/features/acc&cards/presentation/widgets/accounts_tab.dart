@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ibank/core/model/user_model.dart';
+import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/box_shadow.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/picture_widget.dart';
 
 class AccountsTab extends StatelessWidget {
-  const AccountsTab({super.key});
-
+  AccountsTab({super.key});
+  final UserModel? user = AppLocalStorage.getUser();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -16,7 +18,7 @@ class AccountsTab extends StatelessWidget {
       children: [
         PictureWidget(width: 100.w, height: 100.h),
         Text(
-          'Pedri Gonzales',
+          '${user?.name?.toUpperCase()}',
           style: getTitle3TextStyle(color: AppColours.primaryColor1),
         ),
         SizedBox(height: 20.h),

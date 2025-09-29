@@ -11,7 +11,8 @@ import 'package:ibank/features/acc&cards/data/models/response/get_cards_response
 import 'package:ibank/features/acc&cards/presentation/cubit/acc_card_cubit.dart';
 import 'package:ibank/features/acc&cards/presentation/cubit/acc_card_states.dart';
 import 'package:ibank/features/acc&cards/presentation/screens/add_card_screen.dart';
-import 'package:ibank/features/home/presentation/widgets/accounts_tab.dart';
+import 'package:ibank/features/acc&cards/presentation/widgets/accounts_tab.dart';
+import 'package:ibank/features/acc&cards/presentation/widgets/cards_tab.dart';
 import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 
 class AccountcardScreen extends StatefulWidget {
@@ -112,112 +113,9 @@ class _AccountcardScreenState extends State<AccountcardScreen> {
                   isAccountSelected
                       ? Expanded(child: AccountsTab())
                       : Expanded(
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: ListView.separated(
-                                itemCount: cards.length,
-                                itemBuilder: (context, index) {
-                                  return Dismissible(
-                                    key: UniqueKey(),
-                                    confirmDismiss: (direction) {
-                                      return showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: Text('Confirm Delete'),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            content: Text(
-                                              'Are you sure you want to delete this card?',
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(
-                                                    context,
-                                                  ).pop(false);
-                                                },
-                                                child: Text('Cancel'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(
-                                                    context,
-                                                  ).pop(true);
-                                                },
-                                                child: Text('Delete'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    },
-                                    secondaryBackground: Container(
-                                      color: Colors.red,
-                                      alignment: Alignment.centerRight,
-                                      padding: EdgeInsets.only(right: 20.w),
-                                      child: Icon(
-                                        Icons.delete,
-                                        color: Colors.white,
-                                        size: 30,
-                                      ),
-                                    ),
-                                    background: Container(
-                                      color: Colors.red,
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.only(left: 20.w),
-                                      child: Icon(
-                                        Icons.delete,
-                                        color: Colors.white,
-                                        size: 30,
-                                      ),
-                                    ),
-                                    onDismissed: (direction) async {
-                                      final cardId = cards[index].id!;
-                                      cards.removeAt(index);
-                                      setState(() {});
-                                      final cubit =
-                                          context.read<AccCardCubit>();
-                                      await cubit.deleteCard(cardId);
-                                    },
-                                    child: GestureDetector(
-                                      onLongPress: () {
-                                        Dialogs.showInfoDialog(
-                                          context,
-                                          'Are you sure you want to set this card as default ?',
-                                          () {
-                                            context
-                                                .read<AccCardCubit>()
-                                                .setDefaultCard(
-                                                  cards[index].id!,
-                                                );
-                                          },
-                                        );
-                                      },
-                                      child: CreditCardWidget(
-                                        card: cards[index],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                separatorBuilder:
-                                    (context, index) => SizedBox(height: 5.h),
-                              ),
-                            ),
-                            SizedBox(height: 20.h),
-                            CustomButtonWidget(
-                              height: 44.h,
-                              text: 'Add new card',
-                              bgcolor: AppColours.primaryColor1,
-                              textColor: AppColours.naturalColor6,
-                              onPressed: () async {
-                                context.pushTo(AddCardScreen());
-                              },
-                            ),
-                          ],
+                        child: CardsTab(
+                          cards: cards,
+                          cubit: context.read<AccCardCubit>(),
                         ),
                       ),
                 ],

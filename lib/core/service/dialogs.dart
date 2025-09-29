@@ -30,7 +30,25 @@ class Dialogs {
           ),
     );
   }
-
+  static showAlertDialog(BuildContext context, String title, String message, Function? onAction1Pressed,Function? onAction2Pressed, String action1Text, String action2Text) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => onAction1Pressed,
+            child: Text(action1Text),
+          ),
+          TextButton(
+            onPressed: () => onAction2Pressed,
+            child: Text(action2Text),
+          ),
+        ],
+      ),
+    );
+  }
   static void showInfoDialog(BuildContext context, String message,Function? onOkPressed) {
     showDialog(
       context: context,
