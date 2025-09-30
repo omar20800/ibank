@@ -16,12 +16,15 @@ class Datum {
   String? brand;
   @HiveField(5)
   String? userId;
+  @HiveField(6)
+  double? balance;
 
   Datum({
     this.id,
     this.cardNumber,
     this.cardHolderName,
     this.expiryDate,
+    this.balance,
     this.brand,
     this.userId,
   });
@@ -31,6 +34,7 @@ class Datum {
     cardNumber: json['cardNumber'] as String?,
     cardHolderName: json['cardHolderName'] as String?,
     expiryDate: json['expiryDate'] as String?,
+    balance: (json['balance'] as num?)?.toDouble(),
     brand: json['brand'] as String?,
     userId: json['userId'] as String?,
   );
@@ -40,6 +44,7 @@ class Datum {
     'cardNumber': cardNumber,
     'cardHolderName': cardHolderName,
     'expiryDate': expiryDate,
+    'balance': balance,
     'brand': brand,
     'userId': userId,
   };

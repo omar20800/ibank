@@ -57,7 +57,6 @@ class _CardsTabState extends State<CardsTab> {
                   setState(() {});
 
                   await widget.cubit.deleteCard(cardId);
-                  context.pushAndRemoveUntil(MainScreen());
                 },
                 child: GestureDetector(
                   onLongPress: () {

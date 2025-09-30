@@ -34,9 +34,18 @@ class CreditCardWidget extends StatelessWidget {
                 style: getTitle2TextStyle(color: AppColours.naturalColor6),
               ),
             ),
-            Text(
-              '${card!.brand?.toUpperCase()}',
-              style: getBody1TextStyle(color: AppColours.naturalColor6),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${card!.brand?.toUpperCase()}',
+                  style: getBody1TextStyle(color: AppColours.naturalColor6),
+                ),
+                Text(
+                  '${card!.balance ?? 0}\$',
+                  style: getBody1TextStyle(color: AppColours.naturalColor6),
+                ),
+              ],
             ),
             SizedBox(height: 20.h),
             SerialNumberWidget(serialNumber: card!.cardNumber ?? ''),

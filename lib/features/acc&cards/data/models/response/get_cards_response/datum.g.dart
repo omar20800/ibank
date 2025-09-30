@@ -23,6 +23,7 @@ class DatumAdapter extends TypeAdapter<Datum> {
       expiryDate: fields[3] as String?,
       brand: fields[4] as String?,
       userId: fields[5] as String?,
+      balance: fields[6] as double?,
     );
   }
 
@@ -41,7 +42,9 @@ class DatumAdapter extends TypeAdapter<Datum> {
       ..writeByte(4)
       ..write(obj.brand)
       ..writeByte(5)
-      ..write(obj.userId);
+      ..write(obj.userId)
+      ..writeByte(6)
+      ..write(obj.balance);
   }
 
   @override

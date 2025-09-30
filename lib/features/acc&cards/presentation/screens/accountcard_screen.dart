@@ -50,6 +50,7 @@ class _AccountcardScreenState extends State<AccountcardScreen> {
             } else if (state is DeleteCardSuccessState) {
               context.pop();
               Dialogs.showSuccessSnackbar(context, state.message);
+              context.pushAndRemoveUntil(MainScreen());
             } else if (state is DeleteCardErrorState) {
               context.pop();
               Dialogs.showErrorDialog(context, state.error);

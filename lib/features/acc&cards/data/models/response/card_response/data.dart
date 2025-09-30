@@ -2,6 +2,7 @@ class Data {
   String? id;
   String? cardNumber;
   String? cardHolderName;
+  double? balance;
   String? expiryDate;
   String? brand;
 
@@ -10,6 +11,7 @@ class Data {
     this.cardNumber,
     this.cardHolderName,
     this.expiryDate,
+    this.balance,
     this.brand,
   });
 
@@ -17,6 +19,7 @@ class Data {
     id: json['id'] as String?,
     cardNumber: json['cardNumber'] as String?,
     cardHolderName: json['cardHolderName'] as String?,
+    balance: (json['balance'] as num?)?.toDouble(),
     expiryDate: json['expiryDate'] as String?,
     brand: json['brand'] as String?,
   );
@@ -26,6 +29,7 @@ class Data {
     'cardNumber': cardNumber,
     'cardHolderName': cardHolderName,
     'expiryDate': expiryDate,
+    'balance': balance,
     'brand': brand,
   };
 }
