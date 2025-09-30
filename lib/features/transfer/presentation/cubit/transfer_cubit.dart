@@ -6,7 +6,7 @@ class TransferCubit extends Cubit<TransferStates> {
   TransferCubit() : super(TransferInitial());
   Future<void> transferMoney({
     required String receiverEmail,
-    required int amount,
+    required double amount,
     required bool usebalance,
     String? cardId,
   }) async {

@@ -11,7 +11,7 @@ import 'package:ibank/features/acc&cards/data/models/response/get_cards_response
 import 'package:ibank/features/acc&cards/presentation/cubit/acc_card_cubit.dart';
 import 'package:ibank/features/acc&cards/presentation/cubit/acc_card_states.dart';
 import 'package:ibank/features/acc&cards/presentation/screens/add_card_screen.dart';
-import 'package:ibank/features/acc&cards/presentation/widgets/accounts_tab.dart';
+import 'package:ibank/features/acc&cards/presentation/widgets/account_tab.dart';
 import 'package:ibank/features/acc&cards/presentation/widgets/cards_tab.dart';
 import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 

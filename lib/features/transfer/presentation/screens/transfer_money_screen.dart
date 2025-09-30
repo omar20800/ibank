@@ -164,7 +164,7 @@ class _TransferMoneyState extends State<TransferMoney> {
                               context,
                             ).transferMoney(
                               receiverEmail: receiverEmailController.text,
-                              amount: int.parse(
+                              amount: double.parse(
                                 amountToTransferController.text,
                               ),
                               usebalance: true,
@@ -174,7 +174,7 @@ class _TransferMoneyState extends State<TransferMoney> {
                               context,
                             ).transferMoney(
                               receiverEmail: receiverEmailController.text,
-                              amount: int.parse(
+                              amount: double.parse(
                                 amountToTransferController.text,
                               ),
                               usebalance: false,

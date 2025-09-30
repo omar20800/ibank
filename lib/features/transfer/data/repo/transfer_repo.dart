@@ -17,7 +17,7 @@ class TransferRepo {
 
   Future<TransferResponse?> transferMoney({
     required String receiverEmail,
-    required int amount,
+    required double amount,
     required bool usebalance,
     String? cardId,
   }) async {
