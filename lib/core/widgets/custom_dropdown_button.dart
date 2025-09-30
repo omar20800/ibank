@@ -7,18 +7,35 @@ class CustomDropdownButton extends StatelessWidget {
   const CustomDropdownButton({
     super.key,
     required this.methods,
-    this.onChanged, required this.hint,
+    this.onChanged,
+    required this.hint,
+    this.customValidator, required this.enabled,
   });
-
+  final bool enabled;
   final List<DropdownMenuItem<String>> methods;
+  final Function(String?)? customValidator;
   final String hint;
-  final Function(String)? onChanged;
+  final Function(dynamic)? onChanged;
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
-      hint: Text(hint, style: getCaption2TextStyle(color: AppColours.naturalColor4),),
+      validator: (value) {
+        if (customValidator != null) {
+          return customValidator!(value);
+        } else {
+          return null;
+        }
+      },
+      hint: Text(
+        hint,
+        style: getCaption2TextStyle(color: AppColours.naturalColor4),
+      ),
       decoration: InputDecoration(
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.r),
+          borderSide: BorderSide(color: AppColours.naturalColor3),
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.r),
           borderSide: BorderSide(color: AppColours.textColor),
@@ -29,16 +46,18 @@ class CustomDropdownButton extends StatelessWidget {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.r),
-          borderSide: BorderSide(color: AppColours.textColor),
+          borderSide: BorderSide(color: AppColours.primaryColor1),
         ),
         contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
       ),
       items: methods,
-      onChanged: (value) {
-        if (onChanged != null) {
-          onChanged!(value!);
-        }
-      },
+      onChanged: enabled
+          ? (value) {
+              if (onChanged != null && value != null) {
+                onChanged!(value);
+              }
+            }
+          : null,
     );
   }
 }

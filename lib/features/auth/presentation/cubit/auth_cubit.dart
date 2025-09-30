@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ibank/core/model/user_model.dart';
 import 'package:ibank/core/service/local_helper.dart';
+import 'package:ibank/core/service/notifications_service.dart';
 import 'package:ibank/features/auth/data/repo/auth_repo.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 
@@ -56,23 +57,31 @@ class AuthCubit extends Cubit<AuthStates> {
             ),
           );
         } else {
-          emit(AuthSuccess());
-          log("User data: ${value?.data?.toJson()}");
-          AppLocalStorage.cacheToken(value!.data!.token!);
-          AppLocalStorage.cacheUser(
-            UserModel(
-              age: value.data?.age,
-              balance: value.data?.balance,
-              createdAt: value.data?.createdAt,
-              defaultCard: value.data?.defaultCard,
-              email: value.data?.email,
-              imageUrl: value.data?.imageUrl,
-              lastLogin: value.data?.lastLogin,
-              name: value.data?.name,
-              phoneNumber: value.data?.phoneNumber,
-              uid: value.data?.id,
-            ),
+          log("Login successful User data: ${value?.data?.toJson()}");
+          String? fcmToken = await NotificationsService.getFCMToken();
+          var result = await AuthRepo().storeFCMToken(
+            token: value!.data!.token!,
+            fcmToken: fcmToken ?? '',
           );
+          if (result?.status == true) {
+            emit(AuthSuccess(email: emailAddress));
+            log("FCM token stored successfully");
+            AppLocalStorage.cacheToken(value.data!.token!);
+            AppLocalStorage.cacheUser(
+              UserModel(
+                age: value.data?.age,
+                balance: value.data?.balance,
+                createdAt: value.data?.createdAt,
+                defaultCard: value.data?.defaultCard,
+                email: value.data?.email,
+                imageUrl: value.data?.imageUrl,
+                lastLogin: value.data?.lastLogin,
+                name: value.data?.name,
+                phoneNumber: value.data?.phoneNumber,
+                uid: value.data?.id,
+              ),
+            );
+          }
         }
       } else {
         emit(AuthError(errorMessage: 'Unknown error'));
@@ -144,21 +153,31 @@ class AuthCubit extends Cubit<AuthStates> {
       if (value?.status == true) {
         emit(AuthOtpVerified());
         log("Email verified successfully");
-        AppLocalStorage.cacheToken(value!.data!.token!);
-        AppLocalStorage.cacheUser(
-          UserModel(
-            age: value.data?.age,
-            balance: value.data?.balance,
-            createdAt: value.data?.createdAt,
-            defaultCard: value.data?.defaultCard,
-            email: value.data?.email,
-            imageUrl: value.data?.imageUrl,
-            lastLogin: value.data?.lastLogin,
-            name: value.data?.name,
-            phoneNumber: value.data?.phoneNumber,
-            uid: value.data?.id,
-          ),
+        log("Login successful User data: ${value?.data?.toJson()}");
+        String? fcmToken = await NotificationsService.getFCMToken();
+        var result = await AuthRepo().storeFCMToken(
+          token: value!.data!.token!,
+          fcmToken: fcmToken ?? '',
         );
+        if (result?.status == true) {
+          emit(AuthOtpVerified());
+          log("FCM token stored successfully");
+          AppLocalStorage.cacheToken(value.data!.token!);
+          AppLocalStorage.cacheUser(
+            UserModel(
+              age: value.data?.age,
+              balance: value.data?.balance,
+              createdAt: value.data?.createdAt,
+              defaultCard: value.data?.defaultCard,
+              email: value.data?.email,
+              imageUrl: value.data?.imageUrl,
+              lastLogin: value.data?.lastLogin,
+              name: value.data?.name,
+              phoneNumber: value.data?.phoneNumber,
+              uid: value.data?.id,
+            ),
+          );
+        }
       } else {
         emit(AuthError(errorMessage: 'Unknown error'));
       }
@@ -189,9 +208,17 @@ class AuthCubit extends Cubit<AuthStates> {
           phoneNumber: value?.data?.phoneNumber,
           uid: value?.data?.id,
         );
-        emit(GetUserDataSuccess(user: user));
         log("User data: ${value?.data?.toJson()}");
-        AppLocalStorage.cacheUser(user);
+        String? fcmToken = await NotificationsService.getFCMToken();
+        var results = await AuthRepo().storeFCMToken(
+          token: token,
+          fcmToken: fcmToken ?? '',
+        );
+        if (results?.status == true) {
+          log("FCM token stored successfully");
+          emit(GetUserDataSuccess(user: user));
+          AppLocalStorage.cacheUser(user);
+        }
       } else {
         emit(GetUserDataError(errorMessage: 'Unknown error'));
       }
@@ -209,6 +236,7 @@ class AuthCubit extends Cubit<AuthStates> {
         emit(AuthSuccess());
         log("Logout successful");
         AppLocalStorage.removeToken();
+        AppLocalStorage.removeUser();
       } else {
         emit(AuthError(errorMessage: 'Unknown error'));
       }

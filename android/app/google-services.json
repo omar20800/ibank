@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "393552609057",
-    "project_id": "ibank-94dee",
-    "storage_bucket": "ibank-94dee.firebasestorage.app"
+    "project_number": "782414379365",
+    "project_id": "ibank-18479",
+    "storage_bucket": "ibank-18479.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:393552609057:android:b449402559022ef3648860",
+        "mobilesdk_app_id": "1:782414379365:android:530f7c7bfdacb3d477898c",
         "android_client_info": {
           "package_name": "com.example.ibank"
         }
@@ -15,26 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyByEPj8ZwtGcRrCxxV9BAv2dEbFldFBEBg"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:393552609057:android:98643d2659c800ef648860",
-        "android_client_info": {
-          "package_name": "com.omar.ibank"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyByEPj8ZwtGcRrCxxV9BAv2dEbFldFBEBg"
+          "current_key": "AIzaSyDL3AJF-k7EqiNOKVuypd8qIvXmA9kRA-Q"
         }
       ],
       "services": {

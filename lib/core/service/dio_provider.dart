@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:ibank/core/constants/api_constants.dart';
 
 class DioProvider {
   static late Dio _dio;
 
   static init() {
-    _dio = Dio(BaseOptions(baseUrl: 'http://192.168.1.13:8000/'));
+    _dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
   }
 
   static Future<Response> get({

@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyByEPj8ZwtGcRrCxxV9BAv2dEbFldFBEBg',
-    appId: '1:393552609057:android:b449402559022ef3648860',
-    messagingSenderId: '393552609057',
-    projectId: 'ibank-94dee',
-    storageBucket: 'ibank-94dee.firebasestorage.app',
+    apiKey: 'AIzaSyDL3AJF-k7EqiNOKVuypd8qIvXmA9kRA-Q',
+    appId: '1:782414379365:android:530f7c7bfdacb3d477898c',
+    messagingSenderId: '782414379365',
+    projectId: 'ibank-18479',
+    storageBucket: 'ibank-18479.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBIG7r5Hc7TO4X0yxDgE_KCKlZ5ANBDG9s',
-    appId: '1:393552609057:ios:677f5319408c06d3648860',
-    messagingSenderId: '393552609057',
-    projectId: 'ibank-94dee',
-    storageBucket: 'ibank-94dee.firebasestorage.app',
+    apiKey: 'AIzaSyCaTKncZBXFwi2dSpiCa-p8pifFSJYgWpc',
+    appId: '1:782414379365:ios:d85627c9fb51cf1277898c',
+    messagingSenderId: '782414379365',
+    projectId: 'ibank-18479',
+    storageBucket: 'ibank-18479.firebasestorage.app',
     iosBundleId: 'com.example.ibank',
   );
+
 }
