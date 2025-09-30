@@ -36,6 +36,7 @@ class SettingsScreen extends StatelessWidget {
           return Scaffold(
             backgroundColor: AppColours.primaryColor1,
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: AppColours.primaryColor1,
               centerTitle: true,
               title: Text(
