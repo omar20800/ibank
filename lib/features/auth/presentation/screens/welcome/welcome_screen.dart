@@ -74,19 +74,14 @@ class WelcomeScreen extends StatelessWidget {
                         onPressed: () async {
                           final token = AppLocalStorage.getToken();
                           final user = AppLocalStorage.getUser();
+
                           if (token != null) {
-                            final result = Dialogs.showAlertDialog(
-                              context,
-                              'Biometric Login',
-                              'Are you ${user?.name} ?',
-                              () {
-                                Navigator.pop(context, true);
-                              },
-                              () {
-                                Navigator.pop(context, false);
-                              },
-                              'Yes',
-                              'No',
+                            final result = await Dialogs.showAlertDialog(
+                              context: context,
+                              title: 'Biometric Login',
+                              message: 'Are you ${user?.name} ?',
+                              action1Text: 'No',
+                              action2Text: 'Yes',
                             );
                             if (result == true) {
                               final isSupported =
@@ -96,6 +91,7 @@ class WelcomeScreen extends StatelessWidget {
                                     .authenticateWithBiometrics(
                                       'Authenticate to login',
                                     );
+
                                 if (authenticated) {
                                   context.read<AuthCubit>().isTokenValid();
                                 } else {

@@ -30,26 +30,52 @@ class Dialogs {
           ),
     );
   }
-  static showAlertDialog(BuildContext context, String title, String message, Function? onAction1Pressed,Function? onAction2Pressed, String action1Text, String action2Text) {
-    showDialog(
+
+  static Future<bool?> showAlertDialog({
+    required BuildContext context,
+    required String title,
+    required String message,
+    Function? onAction1Pressed,
+    Function? onAction2Pressed,
+    required String action1Text,
+    required String action2Text,
+  }) async {
+    return showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => onAction1Pressed,
-            child: Text(action1Text),
+      barrierDismissible: false,
+      builder:
+          (context) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                  if (onAction1Pressed != null) {
+                    onAction1Pressed();
+                  }
+                },
+                child: Text(action1Text),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                  if (onAction2Pressed != null) {
+                    onAction2Pressed();
+                  }
+                },
+                child: Text(action2Text),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => onAction2Pressed,
-            child: Text(action2Text),
-          ),
-        ],
-      ),
     );
   }
-  static void showInfoDialog(BuildContext context, String message,Function? onOkPressed) {
+
+  static void showInfoDialog(
+    BuildContext context,
+    String message,
+    Function? onOkPressed,
+  ) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -82,7 +108,7 @@ class Dialogs {
     );
   }
 
-  static void showErrorSnackbar (BuildContext context, String message) {
+  static void showErrorSnackbar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -95,7 +121,7 @@ class Dialogs {
     );
   }
 
-  static void showSuccessSnackbar (BuildContext context, String message) {
+  static void showSuccessSnackbar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(

@@ -152,4 +152,21 @@ class AuthRepo {
       throw e.response?.data['message'] ?? 'Something went wrong';
     }
   }
+
+  Future<AuthResponse?> passwordOTPVerify ({
+    required String email,
+    required String otp,
+  }) async {
+    var response = await DioProvider.post(
+      endpoint: 'auth/reset-password-otp-verify',
+      data: {
+        "email": email,
+        "otp": otp,
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return AuthResponse.fromJson(response.data);
+    }
+    return null;
+  }
 }

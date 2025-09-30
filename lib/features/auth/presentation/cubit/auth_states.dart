@@ -34,3 +34,10 @@ class GetUserDataError extends AuthStates {
 }
 
 class GetUserDataLoading extends AuthStates {}
+
+class PasswordResetEmailSent extends AuthStates {
+  final String email;
+  PasswordResetEmailSent({required this.email});
+}
+
+class ChangePasswordSuccessState extends AuthStates {}

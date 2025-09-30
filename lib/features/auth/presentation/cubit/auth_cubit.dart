@@ -122,6 +122,21 @@ class AuthCubit extends Cubit<AuthStates> {
     }
   }
 
+  Future<void> passwordOTPVerify(String email, String otp) async {
+    emit(AuthLoading());
+    try {
+      final value = await AuthRepo().passwordOTPVerify(email: email, otp: otp);
+      if (value?.status == true) {
+        emit(AuthOtpVerified());
+        log("OTP verified successfully");
+      } else {
+        emit(AuthError(errorMessage: 'Unknown error'));
+      }
+    } catch (e) {
+      emit(AuthError(errorMessage: e.toString()));
+    }
+  }
+
   Future<void> verifyEmail(String email, String otp) async {
     emit(AuthLoading());
     try {
@@ -194,6 +209,45 @@ class AuthCubit extends Cubit<AuthStates> {
         emit(AuthSuccess());
         log("Logout successful");
         AppLocalStorage.removeToken();
+      } else {
+        emit(AuthError(errorMessage: 'Unknown error'));
+      }
+    } catch (e) {
+      emit(AuthError(errorMessage: e.toString()));
+    }
+  }
+
+  Future<void> requestPasswordReset(String email) async {
+    emit(AuthLoading());
+    try {
+      final value = await AuthRepo().requestPasswordReset(email);
+      if (value?.status == true) {
+        emit(PasswordResetEmailSent(email: email));
+        log("Password reset email sent");
+      } else {
+        emit(AuthError(errorMessage: 'Unknown error'));
+      }
+    } catch (e) {
+      emit(AuthError(errorMessage: e.toString()));
+    }
+  }
+
+  Future<void> confirmPasswordReset(
+    String email,
+    String otp,
+    String newPassword,
+    String newPasswordConfirm,
+  ) async {
+    emit(AuthLoading());
+    try {
+      final value = await AuthRepo().confirmPasswordReset(
+        email: email,
+        otp: otp,
+        newPassword: newPassword,
+      );
+      if (value?.status == true) {
+        emit(ChangePasswordSuccessState());
+        log("Password changed successfully");
       } else {
         emit(AuthError(errorMessage: 'Unknown error'));
       }

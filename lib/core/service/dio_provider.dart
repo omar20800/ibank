@@ -4,7 +4,7 @@ class DioProvider {
   static late Dio _dio;
 
   static init() {
-    _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:8000/'));
+    _dio = Dio(BaseOptions(baseUrl: 'http://192.168.1.13:8000/'));
   }
 
   static Future<Response> get({

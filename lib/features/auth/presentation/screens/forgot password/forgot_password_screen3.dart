@@ -1,86 +1,118 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ibank/core/extentions/extenstions.dart';
+import 'package:ibank/core/service/dialogs.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/box_shadow.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
 import 'package:ibank/core/widgets/input_field_widget.dart';
+import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 import 'package:ibank/features/auth/presentation/screens/forgot%20password/change_password_success.dart';
 import 'package:ibank/features/auth/presentation/screens/forgot%20password/forgot_password_screen2.dart';
 
 class ForgotPasswordScreen3 extends StatelessWidget {
-  ForgotPasswordScreen3({super.key});
+  ForgotPasswordScreen3({super.key, required this.email, required this.otp});
+
+  final String email;
+  final String otp;
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Change Password', style: getTitle2TextStyle()),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+    return BlocProvider<AuthCubit>(
+      create: (context) => AuthCubit(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Change Password', style: getTitle2TextStyle()),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColours.naturalColor6,
-                  borderRadius: BorderRadius.circular(20.0),
-                  boxShadow: [getDefaultBoxShadow2()],
-                ),
-                padding: EdgeInsets.all(16.0),
+        body: BlocConsumer<AuthCubit, AuthStates>(
+          listener: (context, state) {
+            if (state is AuthLoading) {
+              Dialogs.showLoadingDialog(context);
+            } else if (state is AuthError) {
+              context.pop();
+              Dialogs.showErrorSnackbar(context, state.errorMessage);
+            } else if (state is ChangePasswordSuccessState) {
+              context.pop();
+              context.pushTo(ChangePasswordSuccess());
+            }
+          },
+          builder: (context, state) {
+            return Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Center(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      'type your email to reset your password',
-                      style: getCaption1TextStyle(
-                        color: AppColours.naturalColor3,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColours.naturalColor6,
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [getDefaultBoxShadow2()],
                       ),
-                    ),
-                    SizedBox(height: 16.0),
-                    InputFieldWidget(
-                      hint: "New Password",
-                      controller: passwordController,
-                      isPassword: true,
-                      keyboardType: TextInputType.number,
-                    ),
-                    SizedBox(height: 16.0),
-                    InputFieldWidget(
-                      hint: "Confirm New Password",
-                      controller: confirmPasswordController,
-                      isPassword: true,
-                      keyboardType: TextInputType.number,
-                    ),
-                    SizedBox(height: 16.0),
-                    Text(
-                      'We will send you an otp code to verify your email',
-                      style: getBody3TextStyle(color: AppColours.naturalColor1),
-                    ),
-                    SizedBox(height: 24.0),
-                    CustomButtonWidget(
-                      text: "Send",
-                      onPressed: () {
-                        
-                      },
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'type your email to reset your password',
+                            style: getCaption1TextStyle(
+                              color: AppColours.naturalColor3,
+                            ),
+                          ),
+                          SizedBox(height: 16.0),
+                          InputFieldWidget(
+                            hint: "New Password",
+                            controller: passwordController,
+                            isPassword: true,
+                            keyboardType: TextInputType.number,
+                          ),
+                          SizedBox(height: 16.0),
+                          InputFieldWidget(
+                            hint: "Confirm New Password",
+                            controller: confirmPasswordController,
+                            isPassword: true,
+                            keyboardType: TextInputType.number,
+                          ),
+                          SizedBox(height: 16.0),
+                          Text(
+                            'We will send you an otp code to verify your email',
+                            style: getBody3TextStyle(
+                              color: AppColours.naturalColor1,
+                            ),
+                          ),
+                          SizedBox(height: 24.0),
+                          CustomButtonWidget(
+                            text: "Send",
+                            onPressed: () {
+                              context.read<AuthCubit>().confirmPasswordReset(
+                                email,
+                                otp,
+                                passwordController.text.trim(),
+                                confirmPasswordController.text.trim(),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
