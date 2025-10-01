@@ -21,6 +21,8 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   hive_generator: ^2.0.1
+  image_cropper: ^11.0.0
+  image_picker: ^1.2.0
   local_auth: ^2.3.0
   pinput: ^5.0.2
 

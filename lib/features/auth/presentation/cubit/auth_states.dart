@@ -41,3 +41,16 @@ class PasswordResetEmailSent extends AuthStates {
 }
 
 class ChangePasswordSuccessState extends AuthStates {}
+
+class UploadProfilePicLoading extends AuthStates {}
+
+class UploadProfilePicSuccess extends AuthStates {
+  final UserModel user;
+  final String message;
+  UploadProfilePicSuccess({required this.message,required this.user});
+}
+
+class UploadProfilePicError extends AuthStates {
+  final String errorMessage;
+  UploadProfilePicError({required this.errorMessage});
+}

@@ -6,6 +6,7 @@ class ApiConstants {
 
   static const String authroute = 'auth/';
   static const String cardsroute = 'cards/';
+  static const String usersroute = 'users/';
   static const String notificationsroute = 'notifications/';
   static const String transactionsroute = 'transactions/';
 
@@ -25,4 +26,5 @@ class ApiConstants {
   static const String updateCard = 'update_card';
   static const String changeDefaultCard = 'change_default_card';
   static const String transferMoney = 'transfer-money';
+  static const String uploadProfilePic = 'upload-profile-pic';
 }

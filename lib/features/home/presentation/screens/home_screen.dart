@@ -41,6 +41,7 @@ class HomeScreen extends StatelessWidget {
                 slivers: [
                   SliverFillRemaining(
                     child: SafeArea(
+                      bottom: false,
                       child: Center(
                         child: Column(
                           children: [
@@ -52,7 +53,11 @@ class HomeScreen extends StatelessWidget {
                               ),
                               child: Row(
                                 children: [
-                                  PictureWidget(imageURL: user?.imageUrl),
+                                  PictureWidget(
+                                    imageURL: user?.imageUrl,
+                                    borderColor: AppColours.naturalColor6,
+                                    borderWidth: 2.0,
+                                  ),
                                   SizedBox(width: 20.w),
                                   Text(
                                     'Hi, ${user?.name}',
@@ -90,19 +95,31 @@ class HomeScreen extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     state is GetUserDataLoading
-                                        ? Column(
-                                          children: [
-                                            const CircularProgressIndicator(
-                                              color: AppColours.primaryColor1,
-                                            ),
-                                            SizedBox(height: 20.h),
-                                            Text(
-                                              'Loading user data...',
-                                              style: getBody1TextStyle(
-                                                color: AppColours.primaryColor1,
+                                        ? SizedBox(
+                                          height: 250.h,
+                                          width: double.infinity,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Center(
+                                                child:
+                                                    const CircularProgressIndicator(
+                                                      color:
+                                                          AppColours
+                                                              .primaryColor1,
+                                                    ),
                                               ),
-                                            ),
-                                          ],
+                                              SizedBox(height: 20.h),
+                                              Text(
+                                                'Loading user data...',
+                                                style: getBody1TextStyle(
+                                                  color:
+                                                      AppColours.primaryColor1,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         )
                                         : CreditCardWidget(
                                           card: user?.defaultCard,

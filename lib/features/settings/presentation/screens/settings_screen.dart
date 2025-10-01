@@ -10,8 +10,11 @@ import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/picture_widget.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
+import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 import 'package:ibank/features/settings/presentation/widgets/settings_list_widget.dart';
 import 'package:ibank/features/auth/presentation/screens/welcome/welcome_screen.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({super.key});
@@ -29,6 +32,15 @@ class SettingsScreen extends StatelessWidget {
             context.pop();
             context.pushAndRemoveUntil(WelcomeScreen());
           } else if (state is AuthLoading) {
+            Dialogs.showLoadingDialog(context);
+          } else if (state is UploadProfilePicSuccess) {
+            context.pop();
+            Dialogs.showSuccessSnackbar(context, state.message);
+            context.pushAndRemoveUntil(MainScreen());
+          } else if (state is UploadProfilePicError) {
+            context.pop();
+            Dialogs.showErrorDialog(context, state.errorMessage);
+          } else if (state is UploadProfilePicLoading) {
             Dialogs.showLoadingDialog(context);
           }
         },
@@ -92,6 +104,33 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 PictureWidget(
                   imageURL: user.imageUrl,
+                  onTap: () async {
+                    final picked = await ImagePicker().pickImage(
+                      source: ImageSource.gallery,
+                    );
+                    if (picked != null) {
+                      final croppedFile = await ImageCropper().cropImage(
+                        sourcePath: picked.path,
+                        aspectRatio: const CropAspectRatio(
+                          ratioX: 1,
+                          ratioY: 1,
+                        ),
+                        uiSettings: [
+                          AndroidUiSettings(
+                            toolbarTitle: 'Crop Image',
+                            toolbarColor: Colors.blue,
+                            toolbarWidgetColor: Colors.white,
+                            hideBottomControls: false,
+                            lockAspectRatio: true,
+                          ),
+                          IOSUiSettings(title: 'Crop Image'),
+                        ],
+                      );
+                      final filePath = croppedFile?.path ?? picked.path;
+
+                      context.read<AuthCubit>().uploadProfilePicture(filePath);
+                    }
+                  },
                   width: 100.w,
                   height: 100.h,
                 ),

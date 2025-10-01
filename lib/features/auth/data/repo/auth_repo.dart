@@ -98,6 +98,34 @@ class AuthRepo {
     }
   }
 
+  Future<AuthResponse?> uploadProfilePicture({
+    required String token,
+    required String filePath,
+  }) async {
+    try {
+      final formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(
+          filePath,
+          filename: filePath.split('/').last,
+        ),
+      });
+      var response = await DioProvider.uploadFile(
+        endpoint: ApiConstants.usersroute + ApiConstants.uploadProfilePic,
+        formData: formData,
+        headers: {
+          ApiConstants.authorizationHeader: ApiConstants.bearerToken + token,
+        },
+      );
+
+      if (_isSuccess(response.statusCode)) {
+        return AuthResponse.fromJson(response.data);
+      }
+      return null;
+    } on DioException catch (e) {
+      _handleError(e);
+    }
+  }
+
   Future<AuthResponse?> logout(String token) async {
     try {
       var response = await DioProvider.post(

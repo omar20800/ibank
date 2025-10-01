@@ -45,55 +45,60 @@ class WelcomeScreen extends StatelessWidget {
             return Scaffold(
               appBar: AppBar(backgroundColor: AppColours.primaryColor1),
               backgroundColor: AppColours.primaryColor1,
-              body: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 20,
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        AuthConstants.welcometitle,
-                        style: getTitle1TextStyle(
-                          color: AppColours.naturalColor6,
+              body: SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          AuthConstants.welcometitle,
+                          style: getTitle1TextStyle(
+                            color: AppColours.naturalColor6,
+                          ),
                         ),
-                      ),
-                      Text(
-                        AuthConstants.welcomesubtitle,
-                        style: getTitle3TextStyle(
-                          color: AppColours.naturalColor6,
+                        Text(
+                          AuthConstants.welcomesubtitle,
+                          style: getTitle3TextStyle(
+                            color: AppColours.naturalColor6,
+                          ),
                         ),
-                      ),
-                      Spacer(),
-                      CustomButtonWidget(
-                        text: AuthConstants.signinbutton,
-                        bgcolor: AppColours.primaryColor2,
-                        textColor: AppColours.naturalColor6,
-                        onPressed: () async {
-                          final token = AppLocalStorage.getToken();
-                          final user = AppLocalStorage.getUser();
+                        Spacer(),
+                        CustomButtonWidget(
+                          text: AuthConstants.signinbutton,
+                          bgcolor: AppColours.primaryColor2,
+                          textColor: AppColours.naturalColor6,
+                          onPressed: () async {
+                            final token = AppLocalStorage.getToken();
+                            final user = AppLocalStorage.getUser();
 
-                          if (token != null) {
-                            final result = await Dialogs.showAlertDialog(
-                              context: context,
-                              title: 'Biometric Login',
-                              message: 'Are you ${user?.name} ?',
-                              action1Text: 'No',
-                              action2Text: 'Yes',
-                            );
-                            if (result == true) {
-                              final isSupported =
-                                  await AuthService().checkBiometricSupport();
-                              if (isSupported) {
-                                final authenticated = await AuthService()
-                                    .authenticateWithBiometrics(
-                                      'Authenticate to login',
-                                    );
+                            if (token != null) {
+                              final result = await Dialogs.showAlertDialog(
+                                context: context,
+                                title: 'Biometric Login',
+                                message: 'Are you ${user?.name} ?',
+                                action1Text: 'No',
+                                action2Text: 'Yes',
+                              );
+                              if (result == true) {
+                                final isSupported =
+                                    await AuthService().checkBiometricSupport();
+                                if (isSupported) {
+                                  final authenticated = await AuthService()
+                                      .authenticateWithBiometrics(
+                                        'Authenticate to login',
+                                      );
 
-                                if (authenticated) {
-                                  context.read<AuthCubit>().isTokenValid();
+                                  if (authenticated) {
+                                    context.read<AuthCubit>().isTokenValid();
+                                  } else {
+                                    context.pushTo(LoginScreen());
+                                  }
                                 } else {
                                   context.pushTo(LoginScreen());
                                 }
@@ -103,21 +108,19 @@ class WelcomeScreen extends StatelessWidget {
                             } else {
                               context.pushTo(LoginScreen());
                             }
-                          } else {
-                            context.pushTo(LoginScreen());
-                          }
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      CustomButtonWidget(
-                        text: AuthConstants.signupbutton,
-                        bgcolor: AppColours.naturalColor6,
-                        textColor: AppColours.primaryColor1,
-                        onPressed: () {
-                          context.pushTo(RegisterScreen());
-                        },
-                      ),
-                    ],
+                          },
+                        ),
+                        SizedBox(height: 20),
+                        CustomButtonWidget(
+                          text: AuthConstants.signupbutton,
+                          bgcolor: AppColours.naturalColor6,
+                          textColor: AppColours.primaryColor1,
+                          onPressed: () {
+                            context.pushTo(RegisterScreen());
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

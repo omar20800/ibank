@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math' hide log;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ibank/core/model/user_model.dart';
 import 'package:ibank/core/service/local_helper.dart';
@@ -283,4 +284,36 @@ class AuthCubit extends Cubit<AuthStates> {
       emit(AuthError(errorMessage: e.toString()));
     }
   }
+
+  Future<void> uploadProfilePicture(String filePath) async {
+  emit(UploadProfilePicLoading());
+  try {
+    final token = AppLocalStorage.getToken();
+    final response = await AuthRepo().uploadProfilePicture(
+      token: token ?? '',
+      filePath: filePath,
+    );
+    if (response?.status == true) {
+      UserModel user = UserModel(
+        age: response?.data?.age,
+        balance: response?.data?.balance,
+        createdAt: response?.data?.createdAt,
+        email: response?.data?.email,
+        imageUrl: response?.data?.imageUrl,
+        defaultCard: response?.data?.defaultCard,
+        lastLogin: response?.data?.lastLogin,
+        name: response?.data?.name,
+        phoneNumber: response?.data?.phoneNumber,
+        uid: response?.data?.id,
+      );
+      AppLocalStorage.cacheUser(user);
+      emit(UploadProfilePicSuccess(user: user, message: response?.message ?? "Profile picture uploaded successfully"));
+    } else {
+      emit(UploadProfilePicError(errorMessage: 'Unknown error Uploading profile picture'));
+    }
+  } catch (e) {
+    emit(UploadProfilePicError(errorMessage: e.toString()));
+  }
+}
+
 }

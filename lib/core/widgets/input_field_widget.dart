@@ -74,7 +74,10 @@ class _InputFieldWidgetState extends State<InputFieldWidget> {
                     return AlertDialog(
                       title: const Text("Select Month and Year"),
                       content: StatefulBuilder(
-                        builder: (BuildContext context, StateSetter setState) {
+                        builder: (
+                          BuildContext context,
+                          StateSetter setState,
+                        ) {
                           return Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ibank/core/extentions/extenstions.dart';
+import 'package:ibank/core/functions/validation.dart';
 import 'package:ibank/core/service/dialogs.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
@@ -27,6 +28,8 @@ class _TransferMoneyState extends State<TransferMoney> {
 
   final TextEditingController receiverEmailController = TextEditingController();
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   String? selectedMethod;
 
   bool useBalance = false;
@@ -43,11 +46,18 @@ class _TransferMoneyState extends State<TransferMoney> {
         BlocProvider(create: (context) => AccCardCubit()..getCards()),
       ],
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
-              context.pop();
+              bool isKeyboardOpen =
+                  MediaQuery.of(context).viewInsets.bottom > 0;
+              if (isKeyboardOpen) {
+                FocusScope.of(context).unfocus();
+              } else {
+                context.pop();
+              }
             },
           ),
           title: Text(
@@ -61,6 +71,12 @@ class _TransferMoneyState extends State<TransferMoney> {
               listener: (context, state) {
                 if (state is GetCardsSuccessState) {
                   cards = state.cards;
+                  if (cards.isEmpty) {
+                    useBalance = true;
+                    methods = [];
+                    setState(() {});
+                    return;
+                  }
                   methods =
                       cards
                           .map(
@@ -96,94 +112,113 @@ class _TransferMoneyState extends State<TransferMoney> {
           ],
           child: BlocBuilder<AccCardCubit, AccCardStates>(
             builder: (context, state) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      InputFieldWidget(
-                        hint: 'Enter Amount to Transfer',
-                        controller: amountToTransferController,
-                        keyboardType: TextInputType.number,
-                      ),
-                      SizedBox(height: 20.h),
-                      InputFieldWidget(
-                        hint: 'Enter The Receiver\'s Account Email',
-                        controller: receiverEmailController,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      SizedBox(height: 20.h),
-                      Row(
-                        children: [
-                          Checkbox(
-                            activeColor: AppColours.primaryColor1,
-                            value: useBalance ? true : false,
-                            onChanged: (value) {
-                              if (value == true) {
-                                selectedMethod = null;
-                                useBalance = true;
-                                setState(() {});
-                              } else {
-                                selectedMethod = null;
-                                useBalance = false;
-                                setState(() {});
-                              }
-                              (context as Element).markNeedsBuild();
-                            },
-                          ),
-                          Text(
-                            'Use Balance',
-                            style: getBody1TextStyle(
-                              color: AppColours.textColor,
+              return Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InputFieldWidget(
+                          validator:
+                              (value) =>
+                                  value!.isNotEmpty
+                                      ? null
+                                      : 'Please enter amount to transfer',
+                          hint: 'Enter Amount to Transfer',
+                          controller: amountToTransferController,
+                          keyboardType: TextInputType.number,
+                        ),
+                        SizedBox(height: 20.h),
+                        InputFieldWidget(
+                          validator: (value) => emailValid(value),
+                          hint: 'Enter The Receiver\'s Account Email',
+                          controller: receiverEmailController,
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        SizedBox(height: 20.h),
+                        Row(
+                          children: [
+                            Checkbox(
+                              activeColor: AppColours.primaryColor1,
+                              value: useBalance ? true : false,
+                              onChanged: (value) {
+                                if (methods.isEmpty) {
+                                  Dialogs.showErrorSnackbar(
+                                    context,
+                                    'No cards available, you have to use balance',
+                                  );
+                                  return;
+                                } else {
+                                  if (value == true) {
+                                    selectedMethod = null;
+                                    useBalance = true;
+                                    setState(() {});
+                                  } else {
+                                    selectedMethod = null;
+                                    useBalance = false;
+                                    setState(() {});
+                                  }
+                                }
+                                (context as Element).markNeedsBuild();
+                              },
                             ),
-                          ),
-                        ],
-                      ),
-                      CustomDropdownButton(
-                        enabled: !useBalance,
-                        customValidator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select a payment method';
-                          }
-                          return null;
-                        },
-                        hint: 'Select Payment Method',
-                        methods: methods,
-                        onChanged: (value) {
-                          selectedMethod = value;
-                        },
-                      ),
-                      SizedBox(height: 40.h),
-                      CustomButtonWidget(
-                        text: 'Transfer',
-                        onPressed: () {
-                          if (useBalance) {
-                            BlocProvider.of<TransferCubit>(
-                              context,
-                            ).transferMoney(
-                              receiverEmail: receiverEmailController.text,
-                              amount: double.parse(
-                                amountToTransferController.text,
+                            Text(
+                              'Use Balance',
+                              style: getBody1TextStyle(
+                                color: AppColours.textColor,
                               ),
-                              usebalance: true,
-                            );
-                          } else {
-                            BlocProvider.of<TransferCubit>(
-                              context,
-                            ).transferMoney(
-                              receiverEmail: receiverEmailController.text,
-                              amount: double.parse(
-                                amountToTransferController.text,
-                              ),
-                              usebalance: false,
-                              cardId: selectedMethod,
-                            );
-                          }
-                        },
-                      ),
-                    ],
+                            ),
+                          ],
+                        ),
+                        CustomDropdownButton(
+                          enabled: !useBalance,
+                          customValidator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please select a card';
+                            }
+                            return null;
+                          },
+                          hint: 'Select Credit Card',
+                          methods: methods,
+                          onChanged: (value) {
+                            selectedMethod = value;
+                          },
+                        ),
+                        SizedBox(height: 40.h),
+                        CustomButtonWidget(
+                          text: 'Transfer',
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              if (useBalance) {
+                                BlocProvider.of<TransferCubit>(
+                                  context,
+                                ).transferMoney(
+                                  receiverEmail: receiverEmailController.text,
+                                  amount: double.parse(
+                                    amountToTransferController.text,
+                                  ),
+                                  usebalance: true,
+                                );
+                              } else {
+                                BlocProvider.of<TransferCubit>(
+                                  context,
+                                ).transferMoney(
+                                  receiverEmail: receiverEmailController.text,
+                                  amount: double.parse(
+                                    amountToTransferController.text,
+                                  ),
+                                  usebalance: false,
+                                  cardId: selectedMethod,
+                                );
+                              }
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

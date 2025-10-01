@@ -43,4 +43,22 @@ class DioProvider {
       options: Options(headers: headers),
     );
   }
+
+  static Future<Response> uploadFile({
+  required String endpoint,
+  required FormData formData,
+  Map<String, dynamic>? headers,
+}) {
+  return _dio.post(
+    endpoint,
+    data: formData,
+    options: Options(
+      headers: {
+        "Content-Type": "multipart/form-data",
+        ...?headers,
+      },
+    ),
+  );
+}
+
 }

@@ -16,7 +16,8 @@ class AccountsTab extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        PictureWidget(width: 100.w, height: 100.h),
+        PictureWidget(imageURL: user?.imageUrl, width: 100.w, height: 100.h),
+        SizedBox(height: 10.h),
         Text(
           '${user?.name?.toUpperCase()}',
           style: getTitle3TextStyle(color: AppColours.primaryColor1),

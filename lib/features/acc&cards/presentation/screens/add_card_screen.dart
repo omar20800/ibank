@@ -37,6 +37,18 @@ class _AddCardScreenState extends State<AddCardScreen> {
       create: (context) => AddCardCubit(),
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              bool isKeyboardOpen =
+                  MediaQuery.of(context).viewInsets.bottom > 0;
+              if (isKeyboardOpen) {
+                FocusScope.of(context).unfocus();
+              } else {
+                context.pop();
+              }
+            },
+          ),
           title: Text('Add New Card', style: getTitle2TextStyle()),
         ),
         body: Form(
