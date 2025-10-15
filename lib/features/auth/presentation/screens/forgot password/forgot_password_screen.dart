@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ibank/core/extentions/extenstions.dart';
@@ -9,6 +7,7 @@ import 'package:ibank/core/utils/box_shadow.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
 import 'package:ibank/core/widgets/input_field_widget.dart';
+import 'package:ibank/features/auth/presentation/auth_constants.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 import 'package:ibank/features/auth/presentation/screens/forgot%20password/forgot_password_screen2.dart';
@@ -23,7 +22,7 @@ class ForgotPasswordScreen extends StatelessWidget {
       create: (context) => AuthCubit(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Forgot Password', style: getTitle2TextStyle()),
+          title: Text(AuthConstants.forgotPasswordAppbarTitle, style: getTitle2TextStyle()),
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
@@ -62,26 +61,26 @@ class ForgotPasswordScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'type your email to reset your password',
+                            AuthConstants.forgotPasswordMessage,
                             style: getCaption1TextStyle(
                               color: AppColours.naturalColor3,
                             ),
                           ),
                           SizedBox(height: 16.0),
                           InputFieldWidget(
-                            hint: "email",
+                            hint: AuthConstants.emailhint,
                             controller: emailController,
                             keyboardType: TextInputType.emailAddress,
                           ),
                           SizedBox(height: 16.0),
                           Text(
-                            'We will send you an otp code to verify your email',
+                            AuthConstants.sendOtpMessage,
                             style: getBody3TextStyle(
                               color: AppColours.naturalColor1,
                             ),
                           ),
                           SizedBox(height: 24.0),
-                          CustomButtonWidget(text: "Send", onPressed: () {
+                          CustomButtonWidget(text: AuthConstants.sendButton, onPressed: () {
                             context.read<AuthCubit>().requestPasswordReset(emailController.text.trim());
                           }),
                         ],

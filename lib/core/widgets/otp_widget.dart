@@ -3,8 +3,8 @@ import 'package:ibank/core/functions/validation.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:pinput/pinput.dart';
 
-class otpWidget extends StatelessWidget {
-  const otpWidget({
+class OtpWidget extends StatelessWidget {
+  const OtpWidget({
     super.key,
     required this.otpController,
   });

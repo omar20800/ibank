@@ -11,7 +11,6 @@ import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 import 'package:ibank/features/auth/presentation/screens/login/login_screen.dart';
 import 'package:ibank/features/auth/presentation/screens/vertify%20email/vertify_email_screen.dart';
-import 'package:ibank/features/main/presentation/screens/main_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -131,10 +130,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               isPassword: true,
                               customValidator: () {
                                 if (confirmPasswordController!.text.isEmpty) {
-                                  return "This field can't be empty";
+                                  return AuthConstants.emptyFieldError;
                                 } else if (confirmPasswordController!.text !=
                                     passwordController!.text) {
-                                  return "Passwords do not match";
+                                  return AuthConstants.passwordNotMatchError;
                                 }
                                 return null;
                               },

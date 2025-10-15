@@ -5,12 +5,11 @@ import 'package:ibank/core/extentions/extenstions.dart';
 import 'package:ibank/core/service/dialogs.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
-import 'package:ibank/core/widgets/credit_card_widget.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
+import 'package:ibank/features/acc&cards/presentation/acc_cards_const.dart';
 import 'package:ibank/features/acc&cards/data/models/response/get_cards_response/datum.dart';
 import 'package:ibank/features/acc&cards/presentation/cubit/acc_card_cubit.dart';
 import 'package:ibank/features/acc&cards/presentation/cubit/acc_card_states.dart';
-import 'package:ibank/features/acc&cards/presentation/screens/add_card_screen.dart';
 import 'package:ibank/features/acc&cards/presentation/widgets/account_tab.dart';
 import 'package:ibank/features/acc&cards/presentation/widgets/cards_tab.dart';
 import 'package:ibank/features/main/presentation/screens/main_screen.dart';
@@ -35,7 +34,7 @@ class _AccountcardScreenState extends State<AccountcardScreen> {
       create: (context) => AccCardCubit(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Accounts and Cards', style: getTitle2TextStyle()),
+          title: Text(AccCardsConst.accCardAppbarTitle, style: getTitle2TextStyle()),
         ),
         body: BlocConsumer<AccCardCubit, AccCardStates>(
           listener: (context, state) {
@@ -73,7 +72,7 @@ class _AccountcardScreenState extends State<AccountcardScreen> {
                       CustomButtonWidget(
                         height: 44.h,
                         width: 155.w,
-                        text: 'Account',
+                        text: AccCardsConst.accountTabButton,
                         bgcolor:
                             isAccountSelected
                                 ? AppColours.primaryColor1
@@ -92,7 +91,7 @@ class _AccountcardScreenState extends State<AccountcardScreen> {
                       CustomButtonWidget(
                         height: 44.h,
                         width: 155.w,
-                        text: 'Cards',
+                        text: AccCardsConst.cardsTabButton,
                         bgcolor:
                             isAccountSelected
                                 ? AppColours.primaryColor4

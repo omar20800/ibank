@@ -1,10 +1,9 @@
-import 'dart:developer';
-import 'dart:math' hide log;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ibank/core/model/user_model.dart';
 import 'package:ibank/core/service/local_helper.dart';
 import 'package:ibank/core/service/notifications_service.dart';
 import 'package:ibank/features/auth/data/repo/auth_repo.dart';
+import 'package:ibank/features/auth/presentation/auth_constants.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 
 class AuthCubit extends Cubit<AuthStates> {
@@ -15,16 +14,15 @@ class AuthCubit extends Cubit<AuthStates> {
     try {
       final token = AppLocalStorage.getToken();
       if (token == null) {
-        emit(AuthError(errorMessage: 'No token found'));
+        emit(AuthError(errorMessage: AuthConstants.noTokenFoundError));
         return;
       }
       final value = await AuthRepo().isTokenValid(token);
       if (value?.status == true) {
         emit(AuthSuccess());
-        log("Token is valid Login successful");
       } else {
         AppLocalStorage.removeToken();
-        emit(AuthError(errorMessage: 'Token is invalid'));
+        emit(AuthError(errorMessage: AuthConstants.invalidTokenError));
       }
     } catch (e) {
       emit(AuthError(errorMessage: e.toString()));
@@ -39,9 +37,8 @@ class AuthCubit extends Cubit<AuthStates> {
         password: password,
       );
       if (value?.status == true) {
-        if (value?.message == "Please verify your email before logging in") {
+        if (value?.message == AuthConstants.verifyEmailMessage) {
           emit(AuthOtpVerifiedError(email: emailAddress));
-          log("Please verify your email before logging in");
           AppLocalStorage.cacheToken(value!.data!.token!);
           AppLocalStorage.cacheUser(
             UserModel(
@@ -58,7 +55,6 @@ class AuthCubit extends Cubit<AuthStates> {
             ),
           );
         } else {
-          log("Login successful User data: ${value?.data?.toJson()}");
           String? fcmToken = await NotificationsService.getFCMToken();
           var result = await AuthRepo().storeFCMToken(
             token: value!.data!.token!,
@@ -66,7 +62,6 @@ class AuthCubit extends Cubit<AuthStates> {
           );
           if (result?.status == true) {
             emit(AuthSuccess(email: emailAddress));
-            log("FCM token stored successfully");
             AppLocalStorage.cacheToken(value.data!.token!);
             AppLocalStorage.cacheUser(
               UserModel(
@@ -85,7 +80,7 @@ class AuthCubit extends Cubit<AuthStates> {
           }
         }
       } else {
-        emit(AuthError(errorMessage: 'Unknown error'));
+        emit(AuthError(errorMessage: AuthConstants.cannotLoginUnknownError));
       }
     } catch (e) {
       emit(AuthError(errorMessage: e.toString()));
@@ -108,7 +103,6 @@ class AuthCubit extends Cubit<AuthStates> {
       );
       if (value?.data != null) {
         emit(AuthSuccess(email: emailAddress));
-        log("User data: ${value?.data?.toJson()}");
         AppLocalStorage.cacheToken(value!.data!.token!);
         AppLocalStorage.cacheUser(
           UserModel(
@@ -125,7 +119,7 @@ class AuthCubit extends Cubit<AuthStates> {
           ),
         );
       } else {
-        emit(AuthError(errorMessage: 'Unknown error'));
+        emit(AuthError(errorMessage: AuthConstants.cannotRegisterUnknownError));
       }
     } catch (e) {
       emit(AuthError(errorMessage: e.toString()));
@@ -138,9 +132,10 @@ class AuthCubit extends Cubit<AuthStates> {
       final value = await AuthRepo().passwordOTPVerify(email: email, otp: otp);
       if (value?.status == true) {
         emit(AuthOtpVerified());
-        log("OTP verified successfully");
       } else {
-        emit(AuthError(errorMessage: 'Unknown error'));
+        emit(
+          AuthError(errorMessage: AuthConstants.cannotVerifyOtpUnknownError),
+        );
       }
     } catch (e) {
       emit(AuthError(errorMessage: e.toString()));
@@ -153,8 +148,6 @@ class AuthCubit extends Cubit<AuthStates> {
       final value = await AuthRepo().verifyEmail(email: email, otp: otp);
       if (value?.status == true) {
         emit(AuthOtpVerified());
-        log("Email verified successfully");
-        log("Login successful User data: ${value?.data?.toJson()}");
         String? fcmToken = await NotificationsService.getFCMToken();
         var result = await AuthRepo().storeFCMToken(
           token: value!.data!.token!,
@@ -162,7 +155,6 @@ class AuthCubit extends Cubit<AuthStates> {
         );
         if (result?.status == true) {
           emit(AuthOtpVerified());
-          log("FCM token stored successfully");
           AppLocalStorage.cacheToken(value.data!.token!);
           AppLocalStorage.cacheUser(
             UserModel(
@@ -180,7 +172,9 @@ class AuthCubit extends Cubit<AuthStates> {
           );
         }
       } else {
-        emit(AuthError(errorMessage: 'Unknown error'));
+        emit(
+          AuthError(errorMessage: AuthConstants.cannotVerifyOtpUnknownError),
+        );
       }
     } catch (e) {
       emit(AuthError(errorMessage: e.toString()));
@@ -192,7 +186,7 @@ class AuthCubit extends Cubit<AuthStates> {
     try {
       final token = AppLocalStorage.getToken();
       if (token == null) {
-        emit(GetUserDataError(errorMessage: 'No token found'));
+        emit(GetUserDataError(errorMessage: AuthConstants.noTokenFoundError));
         return;
       }
       final value = await AuthRepo().getUser(token);
@@ -209,19 +203,19 @@ class AuthCubit extends Cubit<AuthStates> {
           phoneNumber: value?.data?.phoneNumber,
           uid: value?.data?.id,
         );
-        log("User data: ${value?.data?.toJson()}");
         String? fcmToken = await NotificationsService.getFCMToken();
         var results = await AuthRepo().storeFCMToken(
           token: token,
           fcmToken: fcmToken ?? '',
         );
         if (results?.status == true) {
-          log("FCM token stored successfully");
           emit(GetUserDataSuccess(user: user));
           AppLocalStorage.cacheUser(user);
         }
       } else {
-        emit(GetUserDataError(errorMessage: 'Unknown error'));
+        emit(
+          GetUserDataError(errorMessage: AuthConstants.getUserDataUnknownError),
+        );
       }
     } catch (e) {
       emit(GetUserDataError(errorMessage: e.toString()));
@@ -235,11 +229,10 @@ class AuthCubit extends Cubit<AuthStates> {
       final value = await AuthRepo().logout(AppLocalStorage.getToken()!);
       if (value?.status == true) {
         emit(AuthSuccess());
-        log("Logout successful");
         AppLocalStorage.removeToken();
         AppLocalStorage.removeUser();
       } else {
-        emit(AuthError(errorMessage: 'Unknown error'));
+        emit(AuthError(errorMessage: AuthConstants.logoutUnkknownError));
       }
     } catch (e) {
       emit(AuthError(errorMessage: e.toString()));
@@ -252,9 +245,10 @@ class AuthCubit extends Cubit<AuthStates> {
       final value = await AuthRepo().requestPasswordReset(email);
       if (value?.status == true) {
         emit(PasswordResetEmailSent(email: email));
-        log("Password reset email sent");
       } else {
-        emit(AuthError(errorMessage: 'Unknown error'));
+        emit(
+          AuthError(errorMessage: AuthConstants.passwordResetEmailUnknownError),
+        );
       }
     } catch (e) {
       emit(AuthError(errorMessage: e.toString()));
@@ -276,9 +270,8 @@ class AuthCubit extends Cubit<AuthStates> {
       );
       if (value?.status == true) {
         emit(ChangePasswordSuccessState());
-        log("Password changed successfully");
       } else {
-        emit(AuthError(errorMessage: 'Unknown error'));
+        emit(AuthError(errorMessage: AuthConstants.changePasswordUnknownError));
       }
     } catch (e) {
       emit(AuthError(errorMessage: e.toString()));
@@ -286,34 +279,39 @@ class AuthCubit extends Cubit<AuthStates> {
   }
 
   Future<void> uploadProfilePicture(String filePath) async {
-  emit(UploadProfilePicLoading());
-  try {
-    final token = AppLocalStorage.getToken();
-    final response = await AuthRepo().uploadProfilePicture(
-      token: token ?? '',
-      filePath: filePath,
-    );
-    if (response?.status == true) {
-      UserModel user = UserModel(
-        age: response?.data?.age,
-        balance: response?.data?.balance,
-        createdAt: response?.data?.createdAt,
-        email: response?.data?.email,
-        imageUrl: response?.data?.imageUrl,
-        defaultCard: response?.data?.defaultCard,
-        lastLogin: response?.data?.lastLogin,
-        name: response?.data?.name,
-        phoneNumber: response?.data?.phoneNumber,
-        uid: response?.data?.id,
+    emit(UploadProfilePicLoading());
+    try {
+      final token = AppLocalStorage.getToken();
+      final response = await AuthRepo().uploadProfilePicture(
+        token: token ?? '',
+        filePath: filePath,
       );
-      AppLocalStorage.cacheUser(user);
-      emit(UploadProfilePicSuccess(user: user, message: response?.message ?? "Profile picture uploaded successfully"));
-    } else {
-      emit(UploadProfilePicError(errorMessage: 'Unknown error Uploading profile picture'));
+      if (response?.status == true) {
+        UserModel user = UserModel(
+          age: response?.data?.age,
+          balance: response?.data?.balance,
+          createdAt: response?.data?.createdAt,
+          email: response?.data?.email,
+          imageUrl: response?.data?.imageUrl,
+          defaultCard: response?.data?.defaultCard,
+          lastLogin: response?.data?.lastLogin,
+          name: response?.data?.name,
+          phoneNumber: response?.data?.phoneNumber,
+          uid: response?.data?.id,
+        );
+        AppLocalStorage.cacheUser(user);
+        emit(
+          UploadProfilePicSuccess(user: user, message: '${response?.message}'),
+        );
+      } else {
+        emit(
+          UploadProfilePicError(
+            errorMessage: AuthConstants.uploadProfilePictureUnknownError,
+          ),
+        );
+      }
+    } catch (e) {
+      emit(UploadProfilePicError(errorMessage: e.toString()));
     }
-  } catch (e) {
-    emit(UploadProfilePicError(errorMessage: e.toString()));
   }
-}
-
 }

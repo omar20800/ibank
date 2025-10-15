@@ -80,10 +80,10 @@ class WelcomeScreen extends StatelessWidget {
                             if (token != null) {
                               final result = await Dialogs.showAlertDialog(
                                 context: context,
-                                title: 'Biometric Login',
-                                message: 'Are you ${user?.name} ?',
-                                action1Text: 'No',
-                                action2Text: 'Yes',
+                                title: AuthConstants.biometricLoginDialogTitle,
+                                message: '${AuthConstants.biometricLoginDescription} ${user?.name} ?',
+                                action1Text: AuthConstants.dialogCancelButton,
+                                action2Text: AuthConstants.dialogConfirmButton,
                               );
                               if (result == true) {
                                 final isSupported =
@@ -91,7 +91,7 @@ class WelcomeScreen extends StatelessWidget {
                                 if (isSupported) {
                                   final authenticated = await AuthService()
                                       .authenticateWithBiometrics(
-                                        'Authenticate to login',
+                                        AuthConstants.authenticateToLoginMessage,
                                       );
 
                                   if (authenticated) {

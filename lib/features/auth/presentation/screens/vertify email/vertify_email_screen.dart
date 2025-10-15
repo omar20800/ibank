@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ibank/core/extentions/extenstions.dart';
-import 'package:ibank/core/functions/validation.dart';
 import 'package:ibank/core/service/dialogs.dart';
 import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
+import 'package:ibank/features/auth/presentation/auth_constants.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:ibank/features/auth/presentation/cubit/auth_states.dart';
 import 'package:ibank/core/widgets/otp_widget.dart';
 import 'package:ibank/features/main/presentation/screens/main_screen.dart';
-import 'package:pinput/pinput.dart';
 
 class VertifyEmailScreen extends StatefulWidget {
   const VertifyEmailScreen({super.key, required this.email});
@@ -42,7 +41,7 @@ class _VertifyEmailScreenState extends State<VertifyEmailScreen> {
             icon: Icon(Icons.arrow_back_ios, color: AppColours.naturalColor6),
           ),
           title: Text(
-            'Vertify Email',
+            AuthConstants.vertifyEmailAppbarTitle,
             style: getTitle2TextStyle(color: AppColours.naturalColor6),
           ),
         ),
@@ -85,13 +84,13 @@ class _VertifyEmailScreenState extends State<VertifyEmailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Verify Your Email',
+                              AuthConstants.verifyEmailMessage,
                               style: getTitle1TextStyle(
                                 color: AppColours.primaryColor1,
                               ),
                             ),
                             Text(
-                              'Enter the verification code we just sent on your email address.',
+                              AuthConstants.enterOtpMessage,
                               style: getCaption2TextStyle(),
                             ),
                             const SizedBox(height: 20),
@@ -102,7 +101,7 @@ class _VertifyEmailScreenState extends State<VertifyEmailScreen> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            otpWidget(otpController: otpController),
+                            OtpWidget(otpController: otpController),
                             const SizedBox(height: 20),
                             CustomButtonWidget(
                               onPressed: () {
@@ -113,7 +112,7 @@ class _VertifyEmailScreenState extends State<VertifyEmailScreen> {
                                   );
                                 }
                               },
-                              text: 'Verify',
+                              text: AuthConstants.verifyButton,
                             ),
                           ],
                         ),

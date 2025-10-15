@@ -8,6 +8,7 @@ import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/custom_button_widget.dart';
 import 'package:ibank/core/widgets/input_field_widget.dart';
+import 'package:ibank/features/acc&cards/presentation/acc_cards_const.dart';
 import 'package:ibank/features/acc&cards/data/models/request/card_request.dart';
 import 'package:ibank/features/acc&cards/presentation/cubit/add_card_cubit.dart';
 import 'package:ibank/features/acc&cards/presentation/cubit/add_card_states.dart';
@@ -49,7 +50,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
               }
             },
           ),
-          title: Text('Add New Card', style: getTitle2TextStyle()),
+          title: Text(AccCardsConst.addCardAppbarTitle, style: getTitle2TextStyle()),
         ),
         body: Form(
           key: widget._formKey,
@@ -80,10 +81,10 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Card Number', style: getCaption1TextStyle()),
+                    Text(AccCardsConst.cardNumberTitle, style: getCaption1TextStyle()),
                     const SizedBox(height: 10.0),
                     InputFieldWidget(
-                      hint: 'Enter Card Number',
+                      hint: AccCardsConst.cardNumberHint,
                       keyboardType: TextInputType.number,
                       controller: widget.cardNumberController,
                       validator: (value) {
@@ -91,10 +92,10 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       },
                     ),
                     const SizedBox(height: 20.0),
-                    Text('Card Holder Name', style: getCaption1TextStyle()),
+                    Text(AccCardsConst.cardHolderNameTitle, style: getCaption1TextStyle()),
                     const SizedBox(height: 10.0),
                     InputFieldWidget(
-                      hint: 'Enter Card Holder Name',
+                      hint: AccCardsConst.cardHolderNameHint,
                       keyboardType: TextInputType.text,
                       controller: widget.cardHolderNameController,
                     ),
@@ -106,12 +107,12 @@ class _AddCardScreenState extends State<AddCardScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Expiration Date',
+                                AccCardsConst.expiryDateTitle,
                                 style: getCaption1TextStyle(),
                               ),
                               const SizedBox(height: 10.0),
                               InputFieldWidget(
-                                hint: 'MM/YY',
+                                hint: AccCardsConst.expiryDateHint,
                                 dateyearpicker: true,
                                 controller: widget.expirationDateController,
                               ),
@@ -123,10 +124,10 @@ class _AddCardScreenState extends State<AddCardScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('CVV', style: getCaption1TextStyle()),
+                              Text(AccCardsConst.cvvTitle, style: getCaption1TextStyle()),
                               const SizedBox(height: 10.0),
                               InputFieldWidget(
-                                hint: 'Enter CVV',
+                                hint: AccCardsConst.cvvHint,
                                 keyboardType: TextInputType.number,
                                 controller: widget.cvvController,
                               ),
@@ -137,7 +138,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     ),
                     const Spacer(),
                     CustomButtonWidget(
-                      text: 'Add Card',
+                      text: AccCardsConst.addCardButton,
                       onPressed: () {
                         if (widget._formKey.currentState!.validate()) {
                           final cardNumber =

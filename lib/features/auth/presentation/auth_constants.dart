@@ -1,10 +1,12 @@
 class AuthConstants {
-  // auth constants
+  // UI strings
   static const String welcometitle = 'Welcome to iBank';
   static String welcomesubtitle = 'Your digital banking solution';
   static const String doubletaptoexit = 'Tap again to exit';
   static const String registertitle = 'Sign up';
   static const String logintitle = 'Sign in';
+  static const String biometricLoginDialogTitle = 'Biometric Login';
+  static const String biometricLoginDescription = 'Are you';
   static const String registerwelcome = 'Welcome to us,';
   static const String loginwelcome = 'Welcome Back';
   static const String registerdescription = 'Hello there, create New account';
@@ -21,26 +23,52 @@ class AuthConstants {
   static const String loading = 'Loading...';
   static const String forgotpassword = 'Forgot Password?';
   static const String donthaveaccount = 'Don\'t have an account?';
-  static const String weakpassworderrormessage =
-      'The password provided is too weak.';
-  static const String emailalreadyexistserrormessage =
-      'The account already exists for that email.';
-  static const String registerunexpectederror =
-      "Unexpected error during registration.";
-  static const String logoutunexpectederror =
-      'An unknown error occurred during logout.';
-  static const String loginunexpectederror = "Unexpected error during login.";
-  static const String userdatanotfound = 'User data not found.';
-  static const String wrongpassworderrormessage =
-      'Wrong password provided for that User.';
+  static const String changePasswordAppbarTitle = 'Change Password';
+  static const String changePasswordSuccessMessage =
+      'Password Changed Successfully!';
+  static const String changePasswordSuccessDescription =
+      'Your password has been changed successfully. You can now log in with your new password.';
+  static const String backToLoginButton = "Back to Login";
+  static const String forgotPasswordAppbarTitle = 'Forgot Password';
+  static const String forgotPasswordMessage =
+      'type your email to reset your password';
+  static const String sendOtpMessage =
+      'We will send you an otp code to verify your email';
+  static const String sendButton = 'Send';
+  static const String enterOtpMessage =
+      'Enter the verification code we just sent on your email address.';
+  static const String verifyOtpMessage =
+      'We sent you an otp code to verify your email';
+  static const String verifyButton = "Verify";
+  static const String newPasswordHint = "New Password";
+  static const String confirmNewPasswordHint = "Confirm New Password";
+  static const String vertifyEmailAppbarTitle = 'Vertify Email';
 
-  //firebase constants
-  static const String userscollection = 'UsersCollection';
-  static const String lastlogin = 'lastLogin';
-  static const String emailalreadyexistserrorcode = 'email-already-in-use';
-  static const String weakpassworderrorcode = 'weak-password';
-  static const String userdatanotfounderrorcode = 'user-not-found';
-  static const String wrongpassworderrorcode = 'wrong-password';
+  static const String verifyEmailMessage =
+      "Please verify your email before logging in";
+  static const String dialogConfirmButton = "Confirm";
+  static const String dialogCancelButton = "Cancel";
+  static const String authenticateToLoginMessage = 'Authenticate to login';
+
+  // error messages
+  static const String noTokenFoundError = 'No token found';
+  static const String invalidTokenError = 'Invalid token';
+  static const String cannotLoginUnknownError = 'cannot login unknown error';
+  static const String cannotRegisterUnknownError =
+      'cannot register unknown error';
+  static const String cannotVerifyOtpUnknownError =
+      'cannot verify otp unknown error';
+  static const String getUserDataUnknownError =
+      'cannot get user data unknown error';
+  static const String logoutUnkknownError = 'cannot logout unknown error';
+  static const String passwordResetEmailUnknownError =
+      'cannot send password reset email unknown error';
+  static const String changePasswordUnknownError =
+      'cannot change password unknown error';
+  static const String uploadProfilePictureUnknownError =
+      'Unknown error Uploading profile picture';
+  static const String emptyFieldError = "This field can't be empty";
+  static const String passwordNotMatchError = "Passwords do not match";
 }
 
 class AuthAssets {
@@ -48,4 +76,5 @@ class AuthAssets {
   static const String registerlogo = 'assets/images/Register.png';
   static const String loginlogo = 'assets/images/Login.png';
   static const String biometriclogo = 'assets/images/Fingerprint.png';
+  static const String passwordillustration = 'assets/images/Illustration 1.png';
 }

@@ -6,6 +6,7 @@ import 'package:ibank/core/utils/appcolour.dart';
 import 'package:ibank/core/utils/box_shadow.dart';
 import 'package:ibank/core/utils/text_style.dart';
 import 'package:ibank/core/widgets/picture_widget.dart';
+import 'package:ibank/features/acc&cards/presentation/acc_cards_const.dart';
 
 class AccountsTab extends StatelessWidget {
   AccountsTab({super.key});
@@ -34,17 +35,17 @@ class AccountsTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'email: ${user?.email}',
+                '${AccCardsConst.emailSectionString}${user?.email}',
                 style: getBody1TextStyle(color: AppColours.primaryColor1),
               ),
               SizedBox(height: 10.h),
               Text(
-                'phone: ${user?.phoneNumber ?? 'No phone number'}',
+                '${AccCardsConst.phoneSectionString}${user?.phoneNumber}',
                 style: getBody1TextStyle(color: AppColours.primaryColor1),
               ),
               SizedBox(height: 10.h),
               Text(
-                'balance: ${user?.balance}\$',
+                '${AccCardsConst.balanceSectionString}${user?.balance}\$',
                 style: getBody1TextStyle(color: AppColours.primaryColor1),
               ),
             ],
